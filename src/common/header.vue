@@ -5,7 +5,7 @@
         <div class="w-box">
           <div class="nav-logo">
             <h1 @click="changePage(-1)">
-              <router-link to="/" title="XMall商城官网">XMall商城</router-link>
+              <router-link to="/" title="淘鞋网">淘鞋网</router-link>
             </h1>
           </div>
           <div class="right-box">
@@ -22,12 +22,6 @@
                 @keydown.enter.native="handleIconClick">
               </el-autocomplete>
               <router-link to="/goods"><a @click="changePage(2)">全部商品</a></router-link>
-              <router-link to="/thanks"><a @click="changePage(4)">捐赠</a></router-link>
-              <!-- <router-link to="/">Smartisan M1 / M1L</router-link>
-              <router-link to="/">Smartisan OS</router-link>
-              <router-link to="/">欢喜云</router-link>
-              <router-link to="/">应用下载</router-link>
-              <router-link to="/">官方论坛</router-link> -->
             </div>
             <div class="nav-aside" ref="aside" :class="{fixed:st}">
               <div class="user pr">
@@ -89,7 +83,7 @@
                                     <div class="cart-cell"><h4>
                                       <a href="" v-text="item.productName"></a>
                                     </h4>
-                                      <!-- <p class="attrs"><span>白色</span></p> -->
+                                       <!--<p class="attrs"><span>白色</span></p>-->
                                       <h6><span class="price-icon">¥</span><span
                                         class="price-num">{{item.salePrice}}</span><span
                                         class="item-num">x {{item.productNum}}</span>
@@ -469,9 +463,10 @@
   }
 
   .header-box {
-    background: $head-bgc;
-    background-image: -webkit-linear-gradient(#000, #121212);
-    background-image: linear-gradient(#000, #121212);
+    background: #f6f6f6;
+    //background: $head-bgc;
+    /*background-image: -webkit-linear-gradient(#000, #121212);*/
+    /*background-image: linear-gradient(#000, #121212);*/
     width: 100%;
 
   }
@@ -493,10 +488,10 @@
       display: flex;
       align-items: center;
       > a {
-        background: url(/static/images/global-logo-red@2x.png) no-repeat 50%;
+        background: url(/static/images/logo.png) no-repeat 50%;
         background-size: cover;
         display: block;
-        @include wh(50px, 40px);
+        @include wh(150px, 40px);
         text-indent: -9999px;
         background-position: 0 0;
       }

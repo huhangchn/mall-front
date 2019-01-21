@@ -66,7 +66,7 @@
       :visible.sync="dialogVisible"
       width="30%"
       style="width:70%;margin:0 auto">
-      <span>首页已升级！XPay个人支付收款系统已上线，赶快去支付体验吧！</span>
+      <span>降价大甩卖！！！</span>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">知道了</el-button>
       </span>
