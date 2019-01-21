@@ -61,16 +61,16 @@
       </div>
     </div>
 
-    <el-dialog
-      title="通知"
-      :visible.sync="dialogVisible"
-      width="30%"
-      style="width:70%;margin:0 auto">
-      <span>降价大甩卖！！！</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">知道了</el-button>
-      </span>
-    </el-dialog>
+    <!--<el-dialog-->
+      <!--title="通知"-->
+      <!--:visible.sync="dialogVisible"-->
+      <!--width="30%"-->
+      <!--style="width:70%;margin:0 auto">-->
+      <!--<span>降价大甩卖！！！</span>-->
+      <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button type="primary" @click="dialogVisible = false">知道了</el-button>-->
+      <!--</span>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 <script>
