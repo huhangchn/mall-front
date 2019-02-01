@@ -48,7 +48,8 @@
       <y-shelf title="产品信息">
         <div slot="content">
           <div class="img-item" v-if="productMsg">
-            <div v-html="productMsg">{{ productMsg }}</div>
+            <img :src="productMsg">
+            <!--<div v-html="productMsg">{{ productMsg }}</div>-->
           </div>
           <div class="no-info" v-else>
             <img src="/static/images/no-data.png">
@@ -87,7 +88,7 @@
       ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
       _productDet (productId) {
         productDet({params: {productId}}).then(res => {
-          let result = res.result
+          let result = res.data
           this.product = result
           this.productMsg = result.detail || ''
           this.small = result.productImageSmall

@@ -117,9 +117,10 @@
           }
         }
         getAllGoods(params).then(res => {
-          if (res.success === true) {
-            this.total = res.result.total
-            this.goods = res.result.data
+          console.log(res)
+          if (res.code === 100000) {
+            this.total = res.data.total
+            this.goods = res.data.data
             this.noResult = false
             if (this.total === 0) {
               this.noResult = true

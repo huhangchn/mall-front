@@ -362,7 +362,8 @@
       }
     },
     mounted () {
-      this._getNavList()
+      // TODO 暂时去掉动态导航栏·
+      // this._getNavList()
       this.token = getStore('token')
       if (this.login) {
         this._getCartList()

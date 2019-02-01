@@ -23,7 +23,7 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 9999,
+    port: 9900,
     autoOpenBrowser: true,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
@@ -37,11 +37,18 @@ module.exports = {
         }
         // target: 'http://xmall.exrick.cn/'  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
       },
+      // '/goods/*': {
+      //   // target: 'http://127.0.0.1:9999'  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
+      //   target: 'http://118.24.151.93:80',  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
+      //   headers:{
+      //     Host: 'xmall.exrick.cn'
+      //     //这边可以堆headers进行设置
+      //   }
+      //   // target: 'http://xmall.exrick.cn/'  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
+      // }
       '/goods/*': {
-        // target: 'http://127.0.0.1:7777'  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
-        target: 'http://118.24.151.93:80',  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
+        target: 'http://127.0.0.1:9999',  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
         headers:{
-          Host: 'xmall.exrick.cn'
           //这边可以堆headers进行设置
         }
         // target: 'http://xmall.exrick.cn/'  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
