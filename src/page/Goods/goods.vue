@@ -1,5 +1,48 @@
 <template>
   <div class="goods">
+    <div>
+      <!-- 条件标签 -->
+      <div class="w" style="height: 30px;margin-top: 10px">
+        <span style="margin-right: 40px">已选属性</span>
+        <el-tag
+          v-for="(tag, index) in tags"
+          :key="index"
+          closable
+          @close="handleClose(tag)"
+          type="success" style="margin-left: 5px">
+          {{tag.value}}
+        </el-tag>
+        <!--<el-button type="primary" size="mini" @click.native.prevent="search">搜索</el-button>-->
+      </div>
+      <div class="search">
+        <div class="w">
+          <span>品牌</span>
+          <a>耐克</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+        </div>
+        <div class="w">
+          <span>分类</span>
+          <a>阿斯蒂芬</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+          <a>撒啊的</a>
+        </div>
+        <div v-for="(attribute, index) in attributeList" :key="index">
+          <attributeOptions :category="attribute" :handleClick="handleClick"
+                    v-show="attribute.show || attribute.show===undefined">
+          </attributeOptions>
+        </div>
+
+      </div>
+
+    </div>
+
     <div class="nav">
       <div class="w">
         <a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>
@@ -62,14 +105,63 @@
   </div>
 </template>
 <script>
-  import { getAllGoods } from '/api/goods.js'
-  import { recommend } from '/api/index.js'
+  import attributeOptions from './attributeOptions'
+  import {getAllGoods, getAttributeList, searchByCondition} from '/api/goods.js'
+  import {recommend} from '/api/index.js'
   import mallGoods from '/components/mallGoods'
   import YButton from '/components/YButton'
   import YShelf from '/components/shelf'
   export default {
-    data () {
+    data() {
       return {
+        attributeList: [
+          {
+            id: 2,
+            name: "哈哈",
+            attributeValue: [{value: "哈哈", id: 4}, {value: "哈哈1", id: 5}, {value: "哈哈2", id: 6}, {
+              value: "哈哈3",
+              id: 7
+            }, {value: "哈哈4", id: 8}],
+            show: true
+          },
+          {
+            id: 3,
+            name: "吼吼",
+            attributeValue: [{value: "吼吼", id: 4}, {value: "吼吼1", id: 5}, {value: "吼吼2", id: 6}, {
+              value: "吼吼3",
+              id: 7
+            }, {value: "吼吼4", id: 8}],
+            show: true
+          },
+          {
+            id: 3,
+            name: "吼吼",
+            attributeValue: [{value: "吼吼", id: 4}, {value: "吼吼1", id: 5}, {value: "吼吼2", id: 6}, {
+              value: "吼吼3",
+              id: 7
+            }, {value: "吼吼4", id: 8}],
+            show: true
+          },
+          {
+            id: 3,
+            name: "吼吼",
+            attributeValue: [{value: "吼吼", id: 4}, {value: "吼吼1", id: 5}, {value: "吼吼2", id: 6}, {
+              value: "吼吼3",
+              id: 7
+            }, {value: "吼吼4", id: 8}],
+            show: true
+          },
+          {
+            id: 3,
+            name: "吼吼",
+            attributeValue: [{value: "吼吼", id: 4}, {value: "吼吼1", id: 5}, {value: "吼吼2", id: 6}, {
+              value: "吼吼3",
+              id: 7
+            }, {value: "吼吼4", id: 8}],
+            show: true
+          }
+        ],
+        tags: [],
         goods: [],
         noResult: false,
         error: false,
@@ -86,19 +178,88 @@
         total: 0,
         pageSize: 20
       }
+    },computed: {
+      queryList(){
+        const tags = this.tags;
+        let valueIds = []
+        let brandId = null
+        let categoryId = null
+        for (let i = 0; i < tags.length; i++) {
+          valueIds.push(tags[i].valueId)
+        }
+        brandId = this.brandId
+        categoryId = this.categoryId
+        return {
+          valueIds,
+          brandId,
+          categoryId
+        }
+      }
     },
     methods: {
-      handleSizeChange (val) {
+      search() {
+        let cid = this.$route.query.cid
+        if (this.min !== '') {
+          this.min = Math.floor(this.min)
+        }
+        if (this.max !== '') {
+          this.max = Math.floor(this.max)
+        }
+        let data = {
+          page: this.currentPage,
+          size: this.pageSize,
+          sort: this.sort,
+          priceGt: this.min,
+          priceLte: this.max,
+          cid: cid,
+          ...this.queryList
+        }
+        searchByCondition(data).then(res => {
+          if (res.code === 100000) {
+            this.total = res.data.total
+            this.goods = res.data.data
+            this.noResult = false
+            if (this.total === 0) {
+              this.noResult = true
+            }
+            this.error = false
+          } else {
+            this.error = true
+          }
+          this.loading = false
+        })
+      },
+      handleClick(attribute, value, index) {
+        for (let i = 0; i < this.attributeList.length; i++) {
+          if (this.attributeList[i].id === attribute.id) {
+            this.attributeList[i].show = false
+            this.tags.push({value: this.attributeList[i].name + "：" + value.value, id: attribute.id, valueId: value.id})
+            this.search()
+            break
+          }
+        }
+      },
+      handleClose(tag) {
+        for (let i = 0; i < this.attributeList.length; i++) {
+          if (this.attributeList[i].id === tag.id) {
+            this.attributeList[i].show = true
+            this.tags.splice(this.tags.indexOf(tag), 1)
+            this.search()
+            break
+          }
+        }
+      },
+      handleSizeChange(val) {
         this.pageSize = val
         this._getAllGoods()
         this.loading = true
       },
-      handleCurrentChange (val) {
+      handleCurrentChange(val) {
         this.currentPage = val
         this._getAllGoods()
         this.loading = true
       },
-      _getAllGoods () {
+      _getAllGoods() {
         let cid = this.$route.query.cid
         if (this.min !== '') {
           this.min = Math.floor(this.min)
@@ -117,7 +278,6 @@
           }
         }
         getAllGoods(params).then(res => {
-          console.log(res)
           if (res.code === 100000) {
             this.total = res.data.total
             this.goods = res.data.data
@@ -133,7 +293,7 @@
         })
       },
       // 默认排序
-      reset () {
+      reset() {
         this.sortType = 1
         this.sort = ''
         this.currentPage = 1
@@ -141,7 +301,7 @@
         this._getAllGoods()
       },
       // 价格排序
-      sortByPrice (v) {
+      sortByPrice(v) {
         v === 1 ? this.sortType = 2 : this.sortType = 3
         this.sort = v
         this.currentPage = 1
@@ -150,16 +310,16 @@
       }
     },
     watch: {
-      $route (to, from) {
+      $route(to, from) {
         if (to.fullPath.indexOf('/goods?cid=') >= 0) {
           this.cId = to.query.cid
           this._getAllGoods()
         }
       }
     },
-    created () {
+    created() {
     },
-    mounted () {
+    mounted() {
       this.windowHeight = window.innerHeight
       this.windowWidth = window.innerWidth
       this._getAllGoods()
@@ -167,11 +327,16 @@
         let data = res.result
         this.recommendPanel = data[0]
       })
+      getAttributeList().then(res => {
+        let data = res.data
+        this.attributeList = data
+      })
     },
     components: {
       mallGoods,
       YButton,
-      YShelf
+      YShelf,
+      attributeOptions
     }
   }
 </script>
@@ -179,36 +344,74 @@
   @import "../../assets/style/mixin";
   @import "../../assets/style/theme";
 
-  .nav {
-    height: 60px;
-    line-height: 60px;
+  .search {
+    line-height: 35px;
+
     > div {
       display: flex;
       align-items: center;
+
+      a {
+        padding: 0 45px;
+        height: 100%;
+        @extend %block-center;
+        font-size: 12px;
+        color: #999;
+
+        &.active {
+          color: #5683EA;
+        }
+
+        &:hover {
+          color: #5683EA;
+        }
+      }
+
+      span {
+        width: 100px;
+      }
+    }
+
+  }
+
+  .nav {
+    height: 60px;
+    line-height: 60px;
+
+    > div {
+      display: flex;
+      align-items: center;
+
       a {
         padding: 0 15px;
         height: 100%;
         @extend %block-center;
         font-size: 12px;
         color: #999;
+
         &.active {
           color: #5683EA;
         }
+
         &:hover {
           color: #5683EA;
         }
       }
+
       input {
         @include wh(80px, 30px);
         border: 1px solid #ccc;
       }
+
       input + input {
         margin-left: 10px;
       }
     }
+
     .price-interval {
       padding: 0 15px;
       @extend %block-center;
+
       input[type=number] {
         border: 1px solid #ccc;
         text-align: center;
@@ -231,17 +434,18 @@
     font-size: 30px;
     display: flex;
     flex-direction: column;
-    .no-data{
+
+    .no-data {
       align-self: center;
     }
   }
 
-  .img-item{
+  .img-item {
     display: flex;
     flex-direction: column;
   }
 
-  .el-pagination{
+  .el-pagination {
     align-self: flex-end;
     margin: 3vw 10vw 2vw;
   }
@@ -255,12 +459,12 @@
 
   .recommend {
     display: flex;
+
     > div {
       flex: 1;
       width: 25%;
     }
   }
-
 
 
 </style>

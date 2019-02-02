@@ -1,4 +1,5 @@
 import http from './public'
+
 // 商品列表
 export const getAllGoods = (params) => {
   return http.fetchGet('/goods/allGoods', params)
@@ -87,3 +88,12 @@ export const getSearch = (params) => {
 export const getQuickSearch = (params) => {
   return http.fetchGet('/goods/quickSearch', params)
 }
+// 获取属性列表
+export const getAttributeList = (params) => {
+  return http.fetchGet('/goods/attributeList', params)
+}
+
+export const searchByCondition = (params) => {
+  return http.fetchPost('/goods/search', params)
+}
+
