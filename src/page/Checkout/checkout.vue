@@ -135,7 +135,8 @@
   </div>
 </template>
 <script>
-  import { getCartList, addressList, addressUpdate, addressAdd, addressDel, productDet, submitOrder } from '/api/goods'
+  import { addressList, addressUpdate, addressAdd, addressDel, productDet, submitOrder } from '/api/goods'
+  import { getCartList } from '/api/cart'
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
   import YPopup from '/components/popup'

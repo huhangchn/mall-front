@@ -3,7 +3,7 @@
     <div>
       <!-- 条件标签 -->
       <div class="w" style="height: 30px;margin-top: 10px">
-        <span style="margin-right: 40px">已选属性</span>
+        <span style="margin-right: 40px; color: #c81623">已选属性</span>
         <el-tag
           v-for="(tag, index) in tags"
           :key="index"
@@ -42,20 +42,22 @@
       </div>
 
     </div>
+    <br>
+    <br>
 
-    <div class="nav">
-      <div class="w">
-        <a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>
-        <a href="javascript:;" @click="sortByPrice(1)" :class="{active:sortType===2}">价格从低到高</a>
-        <a href="javascript:;" @click="sortByPrice(-1)" :class="{active:sortType===3}">价格从高到低</a>
-        <div class="price-interval">
-          <input type="number" class="input" placeholder="价格" v-model="min">
-          <span style="margin: 0 5px"> - </span>
-          <input type="number" placeholder="价格" v-model="max">
-          <y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>
-        </div>
-      </div>
-    </div>
+    <!--<div class="nav">-->
+      <!--<div class="w">-->
+        <!--<a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>-->
+        <!--<a href="javascript:;" @click="sortByPrice(1)" :class="{active:sortType===2}">价格从低到高</a>-->
+        <!--<a href="javascript:;" @click="sortByPrice(-1)" :class="{active:sortType===3}">价格从高到低</a>-->
+        <!--<div class="price-interval">-->
+          <!--<input type="number" class="input" placeholder="价格" v-model="min">-->
+          <!--<span style="margin: 0 5px"> - </span>-->
+          <!--<input type="number" placeholder="价格" v-model="max">-->
+          <!--<y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
 
     <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;">
       <div class="img-item" v-if="!noResult">

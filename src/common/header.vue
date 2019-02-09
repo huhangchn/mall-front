@@ -86,11 +86,11 @@
                                        <!--<p class="attrs"><span>白色</span></p>-->
                                       <h6><span class="price-icon">¥</span><span
                                         class="price-num">{{item.salePrice}}</span><span
-                                        class="item-num">x {{item.productNum}}</span>
+                                        class="item-num">x {{item.num}}</span>
                                       </h6></div>
                                   </div>
                                 </a>
-                                <div class="del-btn del" @click="delGoods(item.productId)">删除</div>
+                                <div class="del-btn del" @click="delGoods(item.skuId)">删除</div>
                               </div>
                             </div>
                           </li>
@@ -144,7 +144,8 @@
 <script>
   import YButton from '/components/YButton'
   import { mapMutations, mapState } from 'vuex'
-  import { getCartList, cartDel, getQuickSearch } from '/api/goods'
+  import { getQuickSearch } from '/api/goods'
+  import { getCartList, cartDel } from '/api/cart'
   import { loginOut, navList } from '/api/index'
   import { setStore, getStore, removeStore } from '/utils/storage'
   // import store from '../store/'
@@ -176,7 +177,7 @@
       totalPrice () {
         var totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
-          totalPrice += (item.productNum * item.salePrice)
+          totalPrice += (item.num * item.salePrice)
         })
         return totalPrice
       },
@@ -184,7 +185,7 @@
       totalNum () {
         var totalNum = 0
         this.cartList && this.cartList.forEach(item => {
-          totalNum += (item.productNum)
+          totalNum += (item.num)
         })
         return totalNum
       }
@@ -295,20 +296,20 @@
       // 登陆时获取一次购物车商品
       _getCartList () {
         getCartList({userId: getStore('userId')}).then(res => {
-          if (res.success === true) {
-            setStore('buyCart', res.result)
+          if (res.code === 100000) {
+            setStore('buyCart', res.data)
           }
           // 重新初始化一次本地数据
         }).then(this.INIT_BUYCART)
       },
       // 删除商品
-      delGoods (productId) {
+      delGoods (skuId) {
         if (this.login) { // 登陆了
-          cartDel({userId: getStore('userId'), productId}).then(res => {
-            this.EDIT_CART({productId})
+          cartDel({userId: getStore('userId'), skuId}).then(res => {
+            this.EDIT_CART({skuId})
           })
         } else {
-          this.EDIT_CART({productId})
+          this.EDIT_CART({skuId})
         }
       },
       toCart () {

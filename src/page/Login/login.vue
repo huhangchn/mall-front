@@ -57,7 +57,7 @@
 import YFooter from '/common/footer'
 import YButton from '/components/YButton'
 import { userLogin, geetest } from '/api/index.js'
-import { addCart } from '/api/goods.js'
+import { addCart } from '/api/cart.js'
 import { setStore, getStore, removeStore } from '/utils/storage.js'
 require('../../../static/geetest/gt.js')
 var captcha
@@ -141,8 +141,8 @@ export default {
         locaCart.forEach(item => {
           cartArr.push({
             userId: getStore('userId'),
-            productId: item.productId,
-            productNum: item.productNum
+            skuId: item.skuId,
+            num: item.num
           })
         })
       }

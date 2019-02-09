@@ -11,7 +11,7 @@
                :class="{show:show}"
                v-model="Num>=limit?limit:Num"
                @blur="blur()"
-               maxlength="2">
+               >
                   <ul ref="ul">
                     <li v-for="i in numList" :key="i">{{i}}</li>
                   </ul>
@@ -36,7 +36,7 @@
       },
       limit: {
         type: Number,
-        default: 10
+        default: 99999
       }
     },
     computed: {},

@@ -30,15 +30,32 @@
         </div>
         <div class="num">
           <span class="params-name">数量</span>
-          <buy-num @edit-num="editNum" :limit="Number(product.limitNum)"></buy-num>
+          <buy-num @edit-num="editNum" :limit="Number(selectedSku.store)"></buy-num>
+        </div>
+        <div class="num">
+          <span class="params-name">颜色</span>
+          <div>
+            <el-radio-group v-model="style" size="medium">
+              <el-radio-button v-for="(item, index) in styleOptions" :key="index" :label="item"></el-radio-button>
+            </el-radio-group>
+          </div>
+        </div>
+        <div class="num">
+          <span class="params-name">尺码</span>
+          <el-radio-group v-model="shoeSize" size="medium">
+            <el-radio-button v-for="(item, index) in shoeSizeOptions" :key="index" :label="item"></el-radio-button>
+          </el-radio-group>
+        </div>
+        <div class="num">
+          <span class="params-name">库存：</span><span>{{selectedSku.store}}</span>
         </div>
         <div class="buy">
           <y-button text="加入购物车"
-                    @btnClick="addCart(product.productId,product.salePrice,product.productName,product.productImageBig)"
+                    @btnClick="addCart(selectedSku.id,product.salePrice,product.productName,product.productImageBig)"
                     classStyle="main-btn"
                     style="width: 145px;height: 50px;line-height: 48px"></y-button>
           <y-button text="现在购买"
-                    @btnClick="checkout(product.productId)"
+                    @btnClick="checkout(selectedSku.id)"
                     style="width: 145px;height: 50px;line-height: 48px;margin-left: 10px"></y-button>
         </div>
       </div>
@@ -62,7 +79,8 @@
   </div>
 </template>
 <script>
-  import { productDet, addCart } from '/api/goods'
+  import { productDet, productSaleInfo } from '/api/goods'
+  import { addCart } from '/api/cart'
   import { mapMutations, mapState } from 'vuex'
   import YShelf from '/components/shelf'
   import BuyNum from '/components/buynum'
@@ -71,13 +89,19 @@
   export default {
     data () {
       return {
+        selectedSku: {store: 0},
+        skuList: [],
+        styleOptions: [],
+        shoeSizeOptions: [],
+        style: null,
+        shoeSize: null,
         productMsg: {},
         small: [],
         big: '',
         product: {
           salePrice: 0
         },
-        productNum: 1,
+        num: 1,
         userId: ''
       }
     },
@@ -85,6 +109,22 @@
       ...mapState(['login', 'showMoveImg', 'showCart'])
     },
     methods: {
+      _productSaleInfo (productId){
+        productSaleInfo({params: {productId}}).then(res => {
+          let skuList = res.data
+          this.skuList = skuList
+          let tempStyleOptions = new Set()
+          let tempShoeSizeOptions = new Set()
+          for(let sku of skuList){
+            tempStyleOptions.add(sku.name)
+            tempShoeSizeOptions.add(sku.shoeSize)
+          }
+          this.styleOptions = Array.from(tempStyleOptions)
+          this.shoeSizeOptions = Array.from(tempShoeSizeOptions)
+          this.style = this.styleOptions[0]
+          this.shoeSize = this.shoeSizeOptions[0]
+        })
+      },
       ...mapMutations(['ADD_CART', 'ADD_ANIMATION', 'SHOW_CART']),
       _productDet (productId) {
         productDet({params: {productId}}).then(res => {
@@ -96,25 +136,32 @@
         })
       },
       addCart (id, price, name, img) {
+        const {selectedSku} = this
+        if(selectedSku.store <= 0 && this.num > selectedSku.store){
+          this.$message.error({
+            message: '库存不足'
+          })
+          return
+        }
         if (!this.showMoveImg) {     // 动画是否在运动
           if (this.login) { // 登录了 直接存在用户名下
-            addCart({userId: this.userId, productId: id, productNum: this.productNum}).then(res => {
+            addCart({userId: this.userId, skuId: id, num: this.num}).then(res => {
               // 并不重新请求数据
               this.ADD_CART({
-                productId: id,
+                skuId: id,
                 salePrice: price,
                 productName: name,
                 productImg: img,
-                productNum: this.productNum
+                num: this.num
               })
             })
           } else { // 未登录 vuex
             this.ADD_CART({
-              productId: id,
+              skuId: id,
               salePrice: price,
               productName: name,
               productImg: img,
-              productNum: this.productNum
+              num: this.num
             })
           }
           // 加入购物车动画
@@ -129,11 +176,23 @@
           }
         }
       },
-      checkout (productId) {
-        this.$router.push({path: '/checkout', query: {productId, num: this.productNum}})
+      checkout (productId, selectedSku) {
+        this.$router.push({path: '/checkout', query: {productId, num: this.num}})
       },
       editNum (num) {
-        this.productNum = num
+        this.num = num
+      },
+      skuChange(){
+        const {style, shoeSize, skuList} = this
+        if(style && shoeSize){
+          for(let sku of skuList){
+            if(sku.name === style && sku.shoeSize === shoeSize){
+              this.selectedSku = sku
+              return
+            }
+          }
+        }
+        this.selectedSku = {store: 0}
       }
     },
     components: {
@@ -142,7 +201,16 @@
     created () {
       let id = this.$route.query.productId
       this._productDet(id)
+      this._productSaleInfo(id)
       this.userId = getStore('userId')
+    },
+    watch: {
+      style() {
+        this.skuChange()
+      },
+      shoeSize(){
+        this.skuChange()
+      }
     }
   }
 </script>

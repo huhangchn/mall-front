@@ -13,11 +13,11 @@
           <a @click="openProduct(msg.productId)">
             <y-button text="查看详情" style="margin: 0 5px"></y-button>
           </a>
-          <y-button text="加入购物车"
+         <!-- <y-button text="加入购物车"
                     style="margin: 0 5px"
                     @btnClick="addCart(msg.productId,msg.salePrice,msg.productName,msg.productImageBig)"
                     classStyle="main-btn"
-          ></y-button>
+          ></y-button>-->
         </div>
         <p><span style="font-size:14px">￥</span>{{Number(msg.salePrice).toFixed(2)}}</p>
       </div>
@@ -26,7 +26,7 @@
 </template>
 <script>
   import YButton from '/components/YButton'
-  import { addCart } from '/api/goods.js'
+  import { addCart } from '/api/cart.js'
   import { mapMutations, mapState } from 'vuex'
   import { getStore } from '/utils/storage'
   export default {
@@ -49,7 +49,7 @@
       addCart (id, price, name, img) {
         if (!this.showMoveImg) {     // 动画是否在运动
           if (this.login) { // 登录了 直接存在用户名下
-            addCart({userId: getStore('userId'), productId: id, productNum: 1}).then(res => {
+            addCart({userId: getStore('userId'), skuId: id, num: 1}).then(res => {
               // 并不重新请求数据
               this.ADD_CART({productId: id, salePrice: price, productName: name, productImg: img})
             })

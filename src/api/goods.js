@@ -92,8 +92,10 @@ export const getQuickSearch = (params) => {
 export const getAttributeList = (params) => {
   return http.fetchGet('/goods/attributeList', params)
 }
-
 export const searchByCondition = (params) => {
   return http.fetchPost('/goods/search', params)
+}
+export const productSaleInfo = (params) => {
+  return http.fetchGet('/goods/productSaleInfo', params)
 }
 

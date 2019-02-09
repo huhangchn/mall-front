@@ -50,8 +50,10 @@ module.exports = {
         target: 'http://127.0.0.1:9999',  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
         headers:{
           //这边可以堆headers进行设置
-        }
-        // target: 'http://xmall.exrick.cn/'  // 请求本地 需要xmall后台项目 默认127.0.0.1:7777
+        },
+      },
+      '/cart/*': {
+        target: 'http://127.0.0.1:9999'
       }
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"

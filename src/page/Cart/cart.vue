@@ -17,7 +17,7 @@
               </div>
               <!--列表-->
               <div class="cart-table" v-for="(item,i) in cartList" :key="i">
-                <div class="cart-group divide pr" :data-productid="item.productId">
+                <div class="cart-group divide pr" :data-productid="item.skuId">
                   <div class="cart-top-items">
                     <div class="cart-items clearfix">
                       <!--勾选-->
@@ -36,28 +36,27 @@
                         <div class="name-table">
                           <a @click="goodsDetails(item.productId)" :title="item.productName" target="_blank"
                              v-text="item.productName"></a>
-                          <!-- <ul class="attribute">
-                            <li>白色</li>
-                          </ul> -->
+                            <ul class="attribute">
+                              <li>白色</li>
+                            </ul>
                         </div>
                       </div>
                       <!--删除按钮-->
                       <div class="operation">
-                        <a class="items-delete-btn" @click="cartdel(item.productId)"></a>
+                        <a class="items-delete-btn" @click="cartdel(item.skuId)"></a>
                       </div>
                       <!--商品数量-->
                       <div>
                         <!--总价格-->
-                        <div class="subtotal" style="font-size: 14px">¥ {{item.salePrice * item.productNum}}</div>
+                        <div class="subtotal" style="font-size: 14px">¥ {{item.salePrice * item.num}}</div>
                         <!--数量-->
-                        <buy-num :num="item.productNum"
-                                 :id="item.productId"
+                        <buy-num :num="item.num"
+                                 :id="item.skuId"
                                  :checked="item.checked"
                                  style="height: 140px;
                                    display: flex;
                                    align-items: center;
                                    justify-content: center;"
-                                 :limit="item.limitNum"
                                  @edit-num="EditNum"
                         >
                         </buy-num>
@@ -117,7 +116,7 @@
   </div>
 </template>
 <script>
-  import { getCartList, cartEdit, editCheckAll, cartDel, delCartChecked } from '/api/goods'
+  import { getCartList, cartEdit, editCheckAll, cartDel, delCartChecked } from '/api/cart'
   import { mapMutations, mapState } from 'vuex'
   import YButton from '/components/YButton'
   import YHeader from '/common/header'
@@ -152,7 +151,7 @@
       totalNum () {
         var totalNum = 0
         this.cartList && this.cartList.forEach(item => {
-          totalNum += (item.productNum)
+          totalNum += (item.num)
         })
         return Number(totalNum)
       },
@@ -161,7 +160,7 @@
         var totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
           if (item.checked === '1') {
-            totalPrice += (item.productNum * item.salePrice)
+            totalPrice += (item.num * item.salePrice)
           }
         })
         return totalPrice
@@ -171,7 +170,7 @@
         var checkNum = 0
         this.cartList && this.cartList.forEach(item => {
           if (item.checked === '1') {
-            checkNum += (item.productNum)
+            checkNum += (item.num)
           }
         })
         return checkNum
@@ -192,26 +191,26 @@
       // 全选
       editCheckAll () {
         let checkAll = !this.checkAllFlag
-        editCheckAll({userId: this.userId, checked: checkAll}).then(res => {
+        editCheckAll({userId: this.userId, checked: checkAll?'1':'0'}).then(res => {
           this.EDIT_CART({checked: checkAll})
         })
       },
       // 修改购物车
-      _cartEdit (userId, productId, productNum, checked) {
+      _cartEdit (userId, skuId, num, checked) {
         cartEdit(
           {
             userId,
-            productId,
-            productNum,
+            skuId,
+            num,
             checked
           }
         ).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             this.EDIT_CART(
               {
-                productId,
+                skuId,
                 checked,
-                productNum
+                num
               }
             )
           }
@@ -221,24 +220,24 @@
       editCart (type, item) {
         if (type && item) {
           let checked = item.checked
-          let productId = item.productId
-          let productNum = item.productNum
+          let skuId = item.skuId
+          let num = item.num
           // 勾选
           if (type === 'check') {
             let newChecked = checked === '1' ? '0' : '1'
-            this._cartEdit(this.userId, productId, productNum, newChecked)
+            this._cartEdit(this.userId, skuId, num, newChecked)
           }
         } else {
           console.log('缺少所需参数')
         }
       },
-      EditNum (productNum, productId, checked) { // 数量
-        this._cartEdit(this.userId, productId, productNum, checked)
+      EditNum (num, skuId, checked) { // 数量
+        this._cartEdit(this.userId, skuId, num, checked)
       },
       // 删除整条购物车
-      cartdel (productId) {
-        cartDel({userId: this.userId, productId}).then(res => {
-          this.EDIT_CART({productId})
+      cartdel (skuId) {
+        cartDel({userId: this.userId, skuId}).then(res => {
+          this.EDIT_CART({skuId})
         })
       },
       checkout () {
@@ -248,17 +247,17 @@
       },
       delChecked () {
         getCartList({userId: getStore('userId')}).then(res => {
-          if (res.success === true) {
-            res.result.forEach(item => {
+          if (res.code === 100000) {
+            res.data.forEach(item => {
               if (item.checked === '1') {
-                let productId = item.productId
-                this.EDIT_CART({productId})
+                let skuId = item.skuId
+                this.EDIT_CART({skuId})
               }
             })
           }
         })
         delCartChecked({userId: this.userId}).then(res => {
-          if (res.success !== true) {
+          if (res.code !== 100000) {
             this.message('删除失败')
           }
         })

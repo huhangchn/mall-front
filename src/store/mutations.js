@@ -18,27 +18,27 @@ export default {
     }
   },
   // 加入购物车
-  [ADD_CART] (state, {productId, salePrice, productName, productImg, productNum = 1}) {
+  [ADD_CART] (state, {skuId, salePrice, productName, productImg, num = 1}) {
     let cart = state.cartList // 购物车
     let falg = true
     let goods = {
-      productId,
+      skuId,
       salePrice,
       productName,
       productImg
     }
     if (cart.length) {        // 有内容
       cart.forEach(item => {
-        if (item.productId === productId) {
-          if (item.productNum >= 0) {
+        if (item.skuId === skuId) {
+          if (item.num >= 0) {
             falg = false
-            item.productNum += productNum
+            item.num += num
           }
         }
       })
     }
     if (!cart.length || falg) {
-      goods.productNum = productNum
+      goods.num = num
       goods.checked = '1'
       cart.push(goods)
     }
@@ -72,12 +72,12 @@ export default {
     // }
   },
   // 移除商品
-  [REDUCE_CART] (state, {productId}) {
+  [REDUCE_CART] (state, {skuId}) {
     let cart = state.cartList
     cart.forEach((item, i) => {
-      if (item.productId === productId) {
-        if (item.productNum > 1) {
-          item.productNum--
+      if (item.skuId === skuId) {
+        if (item.num > 1) {
+          item.num--
         } else {
           cart.splice(i, 1)
         }
@@ -88,18 +88,18 @@ export default {
     setStore('buyCart', state.cartList)
   },
   // 修改购物车
-  [EDIT_CART] (state, {productId, productNum, checked}) {
+  [EDIT_CART] (state, {skuId, num, checked}) {
     let cart = state.cartList
-    if (productNum) {
+    if (num) {
       cart.forEach((item, i) => {
-        if (item.productId === productId) {
-          item.productNum = productNum
+        if (item.skuId === skuId) {
+          item.num = num
           item.checked = checked
         }
       })
-    } else if (productId) {
+    } else if (skuId) {
       cart.forEach((item, i) => {
-        if (item.productId === productId) {
+        if (item.skuId === skuId) {
           cart.splice(i, 1)
         }
       })
