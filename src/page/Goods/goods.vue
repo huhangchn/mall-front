@@ -4,6 +4,27 @@
       <!-- 条件标签 -->
       <div class="w" style="height: 30px;margin-top: 10px">
         <span style="margin-right: 40px; color: #c81623">已选属性</span>
+        <!-- 品牌 -->
+        <el-tag
+          v-for="(tag, index) in tagsBrand"
+          :key="tag"
+          closable
+          @close="handleCloseBrand"
+          type="warning" style="margin-left: 5px">
+          {{tag}}
+        </el-tag>
+
+        <!-- 分类 -->
+        <el-tag
+          v-for="(tag, index) in tagsCategory"
+          :key="tag"
+          closable
+          @close="handleCloseCategory"
+          type="info" style="margin-left: 5px">
+          {{tag}}
+        </el-tag>
+
+        <!-- 属性 -->
         <el-tag
           v-for="(tag, index) in tags"
           :key="index"
@@ -12,26 +33,16 @@
           type="success" style="margin-left: 5px">
           {{tag.value}}
         </el-tag>
-        <!--<el-button type="primary" size="mini" @click.native.prevent="search">搜索</el-button>-->
+
       </div>
       <div class="search">
-        <div class="w">
+        <div class="w" v-if="!tagsBrand.length">
           <span>品牌</span>
-          <a>耐克</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
+          <a v-for="(brand, index) in brandList" :key="index" @click.prevent="brandClick(brand)" v-if="index<8">{{brand.name}}</a>
         </div>
-        <div class="w">
+        <div class="w" v-if="!tagsCategory.length">
           <span>分类</span>
-          <a>阿斯蒂芬</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
-          <a>撒啊的</a>
+          <a v-for="(category, index) in categoryList" :key="index" @click.prevent="categoryClick(category)">{{category.name}}</a>
         </div>
         <div v-for="(attribute, index) in attributeList" :key="index">
           <attributeOptions :category="attribute" :handleClick="handleClick"
@@ -108,14 +119,21 @@
 </template>
 <script>
   import attributeOptions from './attributeOptions'
-  import {getAllGoods, getAttributeList, searchByCondition} from '/api/goods.js'
+  import {getAllGoods, getAttributeList, getBrandList, getCategoryList, searchByCondition} from '/api/goods.js'
   import {recommend} from '/api/index.js'
   import mallGoods from '/components/mallGoods'
   import YButton from '/components/YButton'
   import YShelf from '/components/shelf'
+
   export default {
     data() {
       return {
+        tagsCategory: [],
+        tagsBrand:[],
+        categoryId: null,
+        brandId: null,
+        brandList: [{id:1, name: '耐克'}, {id: 2, name: '特步'}],
+        categoryList: [{id:1, name: '耐克'}, {id: 2, name: '特步'}],
         attributeList: [
           {
             id: 2,
@@ -199,6 +217,26 @@
       }
     },
     methods: {
+      handleCloseBrand(){
+        this.tagsBrand.splice(0,1)
+        this.brandId = null
+        this.search()
+      },
+      handleCloseCategory(){
+        this.tagsCategory.splice(0,1)
+        this.categoryId = null
+        this.search()
+      },
+      categoryClick(category){
+        this.categoryId = category.id
+        this.tagsCategory.push('分类：' + category.name)
+        this.search()
+      },
+      brandClick(brand){
+        this.brandId = brand.id
+        this.tagsBrand.push('品牌：' + brand.name)
+        this.search()
+      },
       search() {
         let cid = this.$route.query.cid
         if (this.min !== '') {
@@ -220,10 +258,7 @@
           if (res.code === 100000) {
             this.total = res.data.total
             this.goods = res.data.data
-            this.noResult = false
-            if (this.total === 0) {
-              this.noResult = true
-            }
+            this.noResult = this.total === 0;
             this.error = false
           } else {
             this.error = true
@@ -330,8 +365,13 @@
         this.recommendPanel = data[0]
       })
       getAttributeList().then(res => {
-        let data = res.data
-        this.attributeList = data
+        this.attributeList = res.data
+      })
+      getBrandList().then(res => {
+        this.brandList = res.data
+      })
+      getCategoryList().then(res => {
+        this.categoryList = res.data
       })
     },
     components: {
@@ -354,7 +394,7 @@
       align-items: center;
 
       a {
-        padding: 0 45px;
+        padding: 0 10px;
         height: 100%;
         @extend %block-center;
         font-size: 12px;

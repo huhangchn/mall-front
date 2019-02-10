@@ -23,20 +23,20 @@
       </div>
     </div>
 
-    <div class="nav">
-      <div class="w">
-        <a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>
-        <a href="javascript:;" @click="sortByPrice(1)" :class="{active:sortType===2}">价格从低到高</a>
-        <a href="javascript:;" @click="sortByPrice(-1)" :class="{active:sortType===3}">价格从高到低</a>
-        <div class="price-interval">
-          <input type="number" class="input" placeholder="价格" v-model="min">
-          <span style="margin: 0 5px"> - </span>
-          <input type="number" placeholder="价格" v-model="max">
-          <y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>
-        </div>
-      </div>
-    </div>
-    
+    <!--<div class="nav">-->
+      <!--<div class="w">-->
+        <!--<a href="javascript:;" :class="{active:sortType===1}" @click="reset()">综合排序</a>-->
+        <!--<a href="javascript:;" @click="sortByPrice(1)" :class="{active:sortType===2}">价格从低到高</a>-->
+        <!--<a href="javascript:;" @click="sortByPrice(-1)" :class="{active:sortType===3}">价格从高到低</a>-->
+        <!--<div class="price-interval">-->
+          <!--<input type="number" class="input" placeholder="价格" v-model="min">-->
+          <!--<span style="margin: 0 5px"> - </span>-->
+          <!--<input type="number" placeholder="价格" v-model="max">-->
+          <!--<y-button text="确定" classStyle="main-btn" @btnClick="reset" style="margin-left: 10px;"></y-button>-->
+        <!--</div>-->
+      <!--</div>-->
+    <!--</div>-->
+
     <div v-loading="loading" element-loading-text="加载中..." style="min-height: 35vw;">
       <div  class="img-item" v-if="!noResult" >
         <!--商品-->
@@ -85,7 +85,7 @@
   </div>
 </template>
 <script>
-  import { getSearch } from '/api/goods.js'
+  import { searchByKey } from '/api/goods.js'
   import { recommend } from '/api/index.js'
   import mallGoods from '/components/mallGoods'
   import YButton from '/components/YButton'
@@ -126,6 +126,13 @@
         this.loading = true
       },
       _getSearch () {
+        if(!this.key){
+          this.$message.error({
+            message: '请输入搜索内容'
+          })
+          return
+        }
+
         let params = {
           params: {
             key: this.key,
@@ -136,10 +143,11 @@
             priceLte: this.max
           }
         }
-        getSearch(params).then(res => {
-          if (res.success === true) {
-            this.goods = res.result.itemList
-            this.total = res.result.recordCount
+
+        searchByKey(params).then(res => {
+          if (res.code === 100000) {
+            this.goods = res.data.data
+            this.total = res.data.total
             this.noResult = false
             if (this.total === 0) {
               this.noResult = true
@@ -176,10 +184,10 @@
       this.windowWidth = window.innerWidth
       this.key = this.$route.query.key
       this._getSearch()
-      recommend().then(res => {
-        let data = res.result
-        this.recommendPanel = data[0]
-      })
+      // recommend().then(res => {
+      //   let data = res.result
+      //   this.recommendPanel = data[0]
+      // })
     },
     components: {
       mallGoods,

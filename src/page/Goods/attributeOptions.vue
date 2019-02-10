@@ -17,7 +17,6 @@
     },
     methods: {
       handleClickItem(category, item, index) {
-        console.log(category, item, index)
         if (this.handleClick) {
           this.handleClick(category, item, index)
         }

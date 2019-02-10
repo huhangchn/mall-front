@@ -193,6 +193,12 @@
     methods: {
       ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART']),
       handleIconClick (ev) {
+        if(!this.input){
+          this.$message.error({
+            message: '请输入搜索内容'
+          })
+          return
+        }
         if (this.$route.path === '/search') {
           this.$router.push({
             path: '/refreshsearch',
