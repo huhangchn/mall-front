@@ -79,7 +79,7 @@
   </div>
 </template>
 <script>
-  import { productDet, productSaleInfo } from '/api/goods'
+  import { productDet, productSaleInfo, productDetBySkuId } from '/api/goods'
   import { addCart } from '/api/cart'
   import { mapMutations, mapState } from 'vuex'
   import YShelf from '/components/shelf'
@@ -133,6 +133,18 @@
           this.productMsg = result.detail || ''
           this.small = result.productImageSmall
           this.big = this.small[0]
+
+          this._productSaleInfo(productId)
+        })
+      },
+      _productDetBySkuId (skuId) {
+        productDetBySkuId({params: {skuId}}).then(res => {
+          let result = res.data
+          this.product = result
+          this.productMsg = result.detail || ''
+          this.small = result.productImageSmall
+          this.big = this.small[0]
+          this._productSaleInfo(result.goodsId)
         })
       },
       addCart (id, price, name, img) {
@@ -199,10 +211,18 @@
       YShelf, BuyNum, YButton
     },
     created () {
-      let id = this.$route.query.productId
-      this._productDet(id)
-      this._productSaleInfo(id)
       this.userId = getStore('userId')
+      let productId = this.$route.query.productId
+      let skuId = this.$route.query.skuId
+      if(productId){
+        this._productDet(productId)
+        return
+      }
+      if(skuId){
+        this._productDetBySkuId(skuId)
+        return
+      }
+
     },
     watch: {
       style() {

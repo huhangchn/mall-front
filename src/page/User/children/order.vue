@@ -73,7 +73,8 @@
   </div>
 </template>
 <script>
-  import { orderList, delOrder } from '/api/goods'
+  import { delOrder } from '/api/goods'
+  import { orderList } from '/api/orders'
   import YShelf from '/components/shelf'
   import { getStore } from '/utils/storage'
   export default {
@@ -105,8 +106,8 @@
       orderPayment (orderId) {
         window.open(window.location.origin + '#/order/payment?orderId=' + orderId)
       },
-      goodsDetails (id) {
-        window.open(window.location.origin + '#/goodsDetails?productId=' + id)
+      goodsDetails (skuId) {
+        window.open(window.location.origin + '#/goodsDetails?skuId=' + skuId)
       },
       orderDetail (orderId) {
         this.$router.push({
@@ -140,8 +141,8 @@
           }
         }
         orderList(params).then(res => {
-          this.orderList = res.result.data
-          this.total = res.result.total
+          this.orderList = res.data.data
+          this.total = res.data.total
           this.loading = false
         })
       },
@@ -152,7 +153,7 @@
           }
         }
         delOrder(params).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             this.orderList.splice(i, 1)
           } else {
             this.message('删除失败')

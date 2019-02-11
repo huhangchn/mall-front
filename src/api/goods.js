@@ -4,34 +4,6 @@ import http from './public'
 export const getAllGoods = (params) => {
   return http.fetchGet('/goods/allGoods', params)
 }
-// 获取购物车列表
-export const getCartList = (params) => {
-  return http.fetchPost('/member/cartList', params)
-}
-// 加入购物车
-export const addCart = (params) => {
-  return http.fetchPost('/member/addCart', params)
-}
-// 删除购物车
-export const delCart = (params) => {
-  return http.fetchPost('/member/delCart', params)
-}
-// 删除购物车勾选商品
-export const delCartChecked = (params) => {
-  return http.fetchPost('/member/delCartChecked', params)
-}
-// 编辑购物车
-export const cartEdit = (params) => {
-  return http.fetchPost('/member/cartEdit', params)
-}
-// 全选
-export const editCheckAll = (params) => {
-  return http.fetchPost('/member/editCheckAll', params)
-}
-// 删除整条购物车
-export const cartDel = (params) => {
-  return http.fetchPost('/member/cartDel', params)
-}
 // 获取用户地址
 export const addressList = (params) => {
   return http.fetchPost('/member/addressList', params)
@@ -107,4 +79,10 @@ export const getBrandList = (params) => {
 }
 export const getCategoryList = (params) => {
   return http.fetchGet('/goods/categoryList', params)
+}
+export const productDetBySkuId = (params) => {
+  return http.fetchGet('/goods/productDetBySkuId', params)
+}
+export const goodsIdBySkuId = (params) => {
+  return http.fetchGet('/goods/goodsIdBySkuId', params)
 }

@@ -122,7 +122,7 @@
   </div>
 </template>
 <script>
-  import { getOrderDet, cancelOrder } from '/api/goods'
+  import { getOrderDet, cancelOrder } from '/api/orders'
   import YShelf from '/components/shelf'
   import { getStore } from '/utils/storage'
   import countDown from '/components/countDown'
@@ -165,36 +165,37 @@
           }
         }
         getOrderDet(params).then(res => {
-          if (res.result.orderStatus === '0') {
+          let data = res.data
+          if (data.orderStatus === '0') {
             this.orderStatus = 1
-          } else if (res.result.orderStatus === '1') {
+          } else if (data.orderStatus === '1') {
             this.orderStatus = 2
-          } else if (res.result.orderStatus === '4') {
+          } else if (data.orderStatus === '4') {
             this.orderStatus = 5
-          } else if (res.result.orderStatus === '5') {
+          } else if (data.orderStatus === '5') {
             this.orderStatus = -1
-          } else if (res.result.orderStatus === '6') {
+          } else if (data.orderStatus === '6') {
             this.orderStatus = 6
           }
-          this.orderList = res.result.goodsList
-          this.orderTotal = res.result.orderTotal
-          this.userName = res.result.addressInfo.userName
-          this.tel = res.result.addressInfo.tel
-          this.streetName = res.result.addressInfo.streetName
-          this.createTime = res.result.createDate
-          this.closeTime = res.result.closeDate
-          this.payTime = res.result.payDate
+          this.orderList = data.goodsList
+          this.orderTotal = data.orderTotal
+          this.userName = data.addressInfo.userName
+          this.tel = data.addressInfo.tel
+          this.streetName = data.addressInfo.streetName
+          this.createTime = data.createDate
+          this.closeTime = data.closeDate
+          this.payTime = data.payDate
           if (this.orderStatus === 5) {
-            this.finishTime = res.result.finishDate
+            this.finishTime = data.finishDate
           } else {
-            this.countTime = res.result.finishDate
+            this.countTime = data.finishDate
           }
           this.loading = false
         })
       },
       _cancelOrder () {
         cancelOrder({orderId: this.orderId}).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             this._getOrderDet()
           } else {
             this.message('取消失败')
@@ -272,7 +273,7 @@
     border: 1px solid #EBEBEB;
     margin-left: -80px;
   }
-  
+
   img {
     display: block;
     @include wh(80px);
