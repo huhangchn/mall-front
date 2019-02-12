@@ -3,24 +3,24 @@
     <y-shelf title="支付订单">
       <div slot="content">
         <div class="box-inner order-info">
-          <h3>提交订单成功，请填写捐赠信息</h3>
-          <p class="payment-detail">请在 <span>24 小时内</span>完成支付，超时订单将自动取消。</p>
-          <p class="payment-detail">我们不会在您完成支付后的 72 小时内发货，您的支付将用作捐赠</p>
-          <p class="payment-detail" style="color:red">请仔细填写捐赠信息，避免系统审核失败无法在捐赠名单中显示您的数据</p>
+          <h3>提交订单成功，请完成支付</h3>
+          <!--<p class="payment-detail">请在 <span>24 小时内</span>完成支付，超时订单将自动取消。</p>-->
+          <!--<p class="payment-detail">我们不会在您完成支付后的 72 小时内发货，您的支付将用作捐赠</p>-->
+          <!--<p class="payment-detail" style="color:red">请仔细填写捐赠信息，避免系统审核失败无法在捐赠名单中显示您的数据</p>-->
         </div>
-        <div class="pay-info">
-          <span style="color:red">*</span> 昵称：<el-input v-model="nickName" placeholder="请输入您的昵称" @change="checkValid" :maxlength="maxLength" class="input"></el-input><br>
-          <span style="color:red">*</span> 捐赠金额：<el-select class="money-select" v-model="moneySelect" placeholder="请选择支付金额" @change="changeSelect">
-            <el-option label="￥0.10 我是穷逼" value="0.10"></el-option>
-            <el-option label="￥1.00 支付测试" value="1.00"></el-option>
-            <el-option label="￥5.00 感谢捐赠" value="5.00"></el-option>
-            <el-option label="￥10.00 感谢大佬" value="10.00"></el-option>
-            <el-option label="自定义 随意撒币" value="custom"></el-option>
-          </el-select><br>
-          <div v-if="moneySelect === 'custom'"><span style="color:red">*</span> 输入金额：<el-input v-model="money" placeholder="请输入捐赠金额(最多2位小数，不得低于0.1元)" @change="checkValid" :maxlength="maxLength" class="input" style="margin-left:10px"></el-input><br></div>
-          <span style="color:red">*</span> 通知邮箱：<el-input v-model="email" placeholder="支付审核结果将以邮件方式发送至您的邮箱" @change="checkValid" :maxlength="maxLength" class="input" style="margin-left:10px"></el-input><br>
-          &nbsp;&nbsp; 留言：<el-input v-model="info" placeholder="请输入您的留言内容" :maxlength="maxLength" class="input"></el-input>
-        </div>
+        <!--<div class="pay-info">-->
+          <!--<span style="color:red">*</span> 昵称：<el-input v-model="nickName" placeholder="请输入您的昵称" @change="checkValid" :maxlength="maxLength" class="input"></el-input><br>-->
+          <!--<span style="color:red">*</span> 捐赠金额：<el-select class="money-select" v-model="moneySelect" placeholder="请选择支付金额" @change="changeSelect">-->
+            <!--<el-option label="￥0.10 我是穷逼" value="0.10"></el-option>-->
+            <!--<el-option label="￥1.00 支付测试" value="1.00"></el-option>-->
+            <!--<el-option label="￥5.00 感谢捐赠" value="5.00"></el-option>-->
+            <!--<el-option label="￥10.00 感谢大佬" value="10.00"></el-option>-->
+            <!--<el-option label="自定义 随意撒币" value="custom"></el-option>-->
+          <!--</el-select><br>-->
+          <!--<div v-if="moneySelect === 'custom'"><span style="color:red">*</span> 输入金额：<el-input v-model="money" placeholder="请输入捐赠金额(最多2位小数，不得低于0.1元)" @change="checkValid" :maxlength="maxLength" class="input" style="margin-left:10px"></el-input><br></div>-->
+          <!--<span style="color:red">*</span> 通知邮箱：<el-input v-model="email" placeholder="支付审核结果将以邮件方式发送至您的邮箱" @change="checkValid" :maxlength="maxLength" class="input" style="margin-left:10px"></el-input><br>-->
+          <!--&nbsp;&nbsp; 留言：<el-input v-model="info" placeholder="请输入您的留言内容" :maxlength="maxLength" class="input"></el-input>-->
+        <!--</div>-->
         <!--支付方式-->
         <div class="pay-type">
           <div class="p-title">支付方式</div>
@@ -41,7 +41,7 @@
               <span>
                 实际应付金额：
               </span>
-              <em><span>¥</span>{{money}}</em>
+              <em><span>¥</span>{{orderTotal.toFixed(2)}}</em>
               <y-button :text="payNow"
                         :classStyle="submit?'main-btn':'disabled-btn'"
                         style="width: 120px;height: 40px;font-size: 16px;line-height: 38px"
@@ -98,7 +98,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { getOrderDet, payMent } from '/api/goods'
+  import { getOrderDet, payMent } from '/api/orders'
   import { getStore, setStore } from '/utils/storage'
   export default {
     data () {
@@ -115,7 +115,7 @@
         tel: '',
         streetName: '',
         payNow: '立刻支付',
-        submit: false,
+        submit: true,
         nickName: '',
         money: '1.00',
         info: '',
@@ -123,7 +123,7 @@
         orderId: '',
         type: '',
         moneySelect: '1.00',
-        isCustom: false,
+        isCustom: true,
         maxLength: 30
       }
     },
@@ -171,11 +171,11 @@
           }
         }
         getOrderDet(params).then(res => {
-          this.cartList = res.result.goodsList
-          this.userName = res.result.addressInfo.userName
-          this.tel = res.result.addressInfo.tel
-          this.streetName = res.result.addressInfo.streetName
-          this.orderTotal = res.result.orderTotal
+          this.cartList = res.data.goodsList
+          this.userName = res.data.addressInfo.userName
+          this.tel = res.data.addressInfo.tel
+          this.streetName = res.data.addressInfo.streetName
+          this.orderTotal = res.data.orderTotal
         })
       },
       paySuc () {
@@ -199,9 +199,9 @@
           userId: this.userId,
           payType: this.type
         }).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             setStore('setTime', 90)
-            setStore('price', this.money)
+            setStore('price', this.orderTotal)
             setStore('isCustom', this.isCustom)
             if (this.payType === 1) {
               this.$router.push({path: '/order/alipay'})

@@ -4,53 +4,9 @@ import http from './public'
 export const getAllGoods = (params) => {
   return http.fetchGet('/goods/allGoods', params)
 }
-// 获取用户地址
-export const addressList = (params) => {
-  return http.fetchPost('/member/addressList', params)
-}
-// 通过id获取地址
-export const getAddress = (params) => {
-  return http.fetchPost('/member/address', params)
-}
-// 修改收货地址
-export const addressUpdate = (params) => {
-  return http.fetchPost('/member/updateAddress', params)
-}
-// 添加收货地址
-export const addressAdd = (params) => {
-  return http.fetchPost('/member/addAddress', params)
-}
-// 删除收货地址
-export const addressDel = (params) => {
-  return http.fetchPost('/member/delAddress', params)
-}
-// 生成订单
-export const submitOrder = (params) => {
-  return http.fetchPost('/member/addOrder', params)
-}
-// 支付
-export const payMent = (params) => {
-  return http.fetchPost('/member/payOrder', params)
-}
-// 获取用户订单
-export const orderList = (params) => {
-  return http.fetchGet('/member/orderList', params)
-}
-// 获取单个订单详情
-export const getOrderDet = (params) => {
-  return http.fetchGet('/member/orderDetail', params)
-}
-// 取消订单
-export const cancelOrder = (params) => {
-  return http.fetchPost('/member/cancelOrder', params)
-}
 // 商品详情
 export const productDet = (params) => {
   return http.fetchGet('/goods/productDet', params)
-}
-// 删除订单
-export const delOrder = (params) => {
-  return http.fetchGet('/member/delOrder', params)
 }
 // 商品列表
 export const getSearch = (params) => {

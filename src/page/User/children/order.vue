@@ -130,7 +130,10 @@
           return '交易关闭'
         } else if (status === '6') {
           return '支付失败'
+        }else if (status === '7') {
+          return '交易取消'
         }
+
       },
       _orderList () {
         let params = {

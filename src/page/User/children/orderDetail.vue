@@ -42,9 +42,9 @@
             <ul>
               <li class="status-title"><h3>订单状态：已支付，待系统审核确认</h3></li>
             </ul>
-            <p class="realtime">
-              <span>请耐心等待审核，审核结果将发送到您的邮箱，并且您所填写的捐赠数据将显示在捐赠表中。</span>
-            </p>
+            <!--<p class="realtime">-->
+              <!--<span>请耐心等待审核，审核结果将发送到您的邮箱，并且您所填写的捐赠数据将显示在捐赠表中。</span>-->
+            <!--</p>-->
           </div>
           <div class="status-now" v-if="orderStatus === -1 || orderStatus === 6">
             <ul>
@@ -156,7 +156,7 @@
         window.open(window.location.origin + '#/order/payment?orderId=' + orderId)
       },
       goodsDetails (id) {
-        window.open(window.location.origin + '#/goodsDetails?productId=' + id)
+        window.open(window.location.origin + '#/goodsDetails?skuId=' + id)
       },
       _getOrderDet () {
         let params = {
@@ -174,7 +174,7 @@
             this.orderStatus = 5
           } else if (data.orderStatus === '5') {
             this.orderStatus = -1
-          } else if (data.orderStatus === '6') {
+          } else if (data.orderStatus === '7') {
             this.orderStatus = 6
           }
           this.orderList = data.goodsList

@@ -54,9 +54,9 @@
                     @btnClick="addCart(selectedSku.id,product.salePrice,product.productName,product.productImageBig)"
                     classStyle="main-btn"
                     style="width: 145px;height: 50px;line-height: 48px"></y-button>
-          <y-button text="现在购买"
-                    @btnClick="checkout(selectedSku.id)"
-                    style="width: 145px;height: 50px;line-height: 48px;margin-left: 10px"></y-button>
+          <!--<y-button text="现在购买"-->
+                    <!--@btnClick="checkout(selectedSku.id)"-->
+                    <!--style="width: 145px;height: 50px;line-height: 48px;margin-left: 10px"></y-button>-->
         </div>
       </div>
     </div>
@@ -144,7 +144,7 @@
           this.productMsg = result.detail || ''
           this.small = result.productImageSmall
           this.big = this.small[0]
-          this._productSaleInfo(result.goodsId)
+          this._productSaleInfo(result.productId)
         })
       },
       addCart (id, price, name, img) {

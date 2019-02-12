@@ -1,6 +1,6 @@
 <template>
   <div class="w" style="padding-bottom: 100px;">
-    <y-shelf title="XPay收银台 收款方: Exrick">
+    <y-shelf title="淘鞋网收银台 收款方: 淘鞋网">
       <div slot="content">
         <div class="box-inner order-info">
           <p class="payment-detail">扫一扫付款（元）</p>
@@ -21,14 +21,14 @@
             <img src="https://t.alipayobjects.com/images/rmsweb/T1ASFgXdtnXXXXXXXX.png" :class="show?'close-img':'show-img'" @click="changePic()">
           </div>
 
-          <img src="static/images/red.png" width="50px" height="50px" class="red" title="支付领红包" @click="showRed()">
+          <!--<img src="static/images/red.png" width="50px" height="50px" class="red" title="支付领红包" @click="showRed()">-->
         </div>
 
         <div>
           <div class="box-btn">
             <div>
               <span>
-              
+
               </span>
               <em><span>¥</span>{{orderTotal}}</em>
               <y-button :text="payNow"
@@ -43,17 +43,17 @@
       </div>
     </y-shelf>
 
-    <el-dialog
-      title="支付红包"
-      :visible.sync="dialogVisible"
-      width="30%"
-      @close="handleClose" style="text-align:center;width:50%;margin:0 auto">
-      <img src="http://oweupqzdv.bkt.clouddn.com/1512881761970_small.jpg" class="qr-red"/>
-      <span>支付前领个红包吧(每日可领一次)</span>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false">领取了</el-button>
-      </span>
-    </el-dialog>
+    <!--<el-dialog-->
+      <!--title="支付红包"-->
+      <!--:visible.sync="dialogVisible"-->
+      <!--width="30%"-->
+      <!--@close="handleClose" style="text-align:center;width:50%;margin:0 auto">-->
+      <!--<img src="http://oweupqzdv.bkt.clouddn.com/1512881761970_small.jpg" class="qr-red"/>-->
+      <!--<span>支付前领个红包吧(每日可领一次)</span>-->
+      <!--<span slot="footer" class="dialog-footer">-->
+        <!--<el-button type="primary" @click="dialogVisible = false">领取了</el-button>-->
+      <!--</span>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 <script>
@@ -98,6 +98,9 @@
         return num
       },
       handleClose () {
+        this.countDownStart()
+      },
+      countDownStart(){
         this.countDown()
         this.countTime()
       },
@@ -169,6 +172,7 @@
         this.picName = this.orderTotal
         this.imgPath = 'static/qr/alipay/' + this.picName + '.png'
       }
+      this.countDownStart()
     },
     components: {
       YShelf,
@@ -348,7 +352,7 @@
     color: #222;
     margin-top: -18px;
   }
-  
+
   .timeout{
     position: absolute;
     top: 0;

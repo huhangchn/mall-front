@@ -2,11 +2,11 @@ import http from './public'
 
 // 生成订单
 export const submitOrder = (params) => {
-  return http.fetchPost('/member/addOrder', params)
+  return http.fetchPost('/orders/addOrder', params)
 }
 // 支付
 export const payMent = (params) => {
-  return http.fetchPost('/member/payOrder', params)
+  return http.fetchPost('/orders/payOrder', params)
 }
 // 获取用户订单
 export const orderList = (params) => {
@@ -18,5 +18,5 @@ export const getOrderDet = (params) => {
 }
 // 取消订单
 export const cancelOrder = (params) => {
-  return http.fetchPost('/member/cancelOrder', params)
+  return http.fetchPost('/orders/cancelOrder', params)
 }

@@ -58,7 +58,7 @@
   </div>
 </template>
 <script>
-  import { addressList, addressUpdate, addressAdd, addressDel } from '/api/goods'
+  import { addressList, addressUpdate, addressAdd, addressDel } from '/api/address'
   import YButton from '/components/YButton'
   import YPopup from '/components/popup'
   import YShelf from '/components/shelf'
@@ -93,10 +93,10 @@
       },
       _addressList () {
         addressList({userId: this.userId}).then(res => {
-          let data = res.result
+          let data = res.data
           if (data.length) {
-            this.addList = res.result
-            this.addressId = res.result[0].addressId || '1'
+            this.addList = res.data
+            this.addressId = res.data[0].addressId || '1'
           } else {
             this.addList = []
           }
@@ -109,7 +109,7 @@
       },
       _addressAdd (params) {
         addressAdd(params).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             this._addressList()
           } else {
             this.message(res.message)
@@ -136,7 +136,7 @@
       // 删除
       del (addressId, i) {
         addressDel({addressId: addressId}).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             this.addList.splice(i, 1)
           } else {
             this.message('删除失败')
@@ -196,10 +196,10 @@
       color: #838383;
     }
     .address {
-      margin-left: 115px; 
+      margin-left: 115px;
     }
     .tel {
-      margin-left: 195px; 
+      margin-left: 195px;
     }
   }
 

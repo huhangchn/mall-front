@@ -73,10 +73,10 @@
                       <!--商品数量-->
                       <div>
                         <!--总价格-->
-                        <div class="subtotal" style="font-size: 14px">¥ {{item.salePrice * item.productNum}}</div>
+                        <div class="subtotal" style="font-size: 14px">¥ {{item.salePrice * item.num}}</div>
                         <!--数量-->
                         <div class="item-cols-num">
-                          <span v-text="item.productNum"></span>
+                          <span v-text="item.num"></span>
                         </div>
                         <!--价格-->
                         <div class="price">¥ {{item.salePrice}}</div>
@@ -135,7 +135,9 @@
   </div>
 </template>
 <script>
-  import { addressList, addressUpdate, addressAdd, addressDel, productDet, submitOrder } from '/api/goods'
+  import { addressList, addressUpdate, addressAdd, addressDel } from '/api/address'
+  import { productDet } from '/api/goods'
+  import { submitOrder } from '/api/orders'
   import { getCartList } from '/api/cart'
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
@@ -179,7 +181,7 @@
         let totalPrice = 0
         this.cartList && this.cartList.forEach(item => {
           if (item.checked === '1') {
-            totalPrice += (item.productNum * item.salePrice)
+            totalPrice += (item.num * item.salePrice)
           }
         })
         this.orderTotal = totalPrice
@@ -197,12 +199,12 @@
       },
       _getCartList () {
         getCartList({userId: this.userId}).then(res => {
-          this.cartList = res.result
+          this.cartList = res.data
         })
       },
       _addressList () {
         addressList({userId: this.userId}).then(res => {
-          let data = res.result
+          let data = res.data
           if (data.length) {
             this.addList = data
             this.addressId = data[0].addressId || '1'
@@ -221,7 +223,7 @@
       },
       _addressAdd (params) {
         addressAdd(params).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             this._addressList()
           } else {
             this.message(res.message)
@@ -264,8 +266,8 @@
           orderTotal: this.orderTotal
         }
         submitOrder(params).then(res => {
-          if (res.success === true) {
-            this.payment(res.result)
+          if (res.code === 100000) {
+            this.payment(res.data)
           } else {
             this.message(res.message)
             this.submitOrder = '提交订单'
@@ -325,7 +327,7 @@
       },
       _productDet (productId) {
         productDet({params: {productId}}).then(res => {
-          let item = res.result
+          let item = res.data
           item.checked = '1'
           item.productImg = item.productImageBig
           item.productNum = this.num
