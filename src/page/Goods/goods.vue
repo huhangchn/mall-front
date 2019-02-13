@@ -360,10 +360,10 @@
       this.windowHeight = window.innerHeight
       this.windowWidth = window.innerWidth
       this._getAllGoods()
-      recommend().then(res => {
-        let data = res.result
-        this.recommendPanel = data[0]
-      })
+      // recommend().then(res => {
+      //   let data = res.result
+      //   this.recommendPanel = data[0]
+      // })
       getAttributeList().then(res => {
         this.attributeList = res.data
       })

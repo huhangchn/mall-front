@@ -23,7 +23,7 @@
               </div>
             </li>
             <li style="text-align: right" class="pr">
-              <el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>
+              <!--<el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>-->
               <!-- <span class="pa" style="top: 0;left: 0;color: #d44d44">{{ruleForm.errMsg}}</span> -->
               <a href="javascript:;" class="register" @click="toRegister">注册 淘鞋网 账号</a>
               <a style="padding: 1px 0 0 10px" @click="open('找回密码','测试账号：test | test')">忘记密码 ?</a>

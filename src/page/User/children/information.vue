@@ -76,7 +76,7 @@
 </template>
 <script>
   import YButton from '/components/YButton'
-  import { upload } from '/api/index'
+  import { uploadAvatar } from '/api/user'
   import YShelf from '/components/shelf'
   import vueCropper from 'vue-cropper'
   import { mapState, mapMutations } from 'vuex'
@@ -151,9 +151,9 @@
         if (this.option.img) {
           this.$refs.cropper.getCropData((data) => {
             this.imgSrc = data
-            upload({userId: this.userId, token: this.token, imgData: data}).then(res => {
-              if (res.success === true) {
-                let path = res.result
+            uploadAvatar({userId: this.userId, token: this.token, imgData: data}).then(res => {
+              if (res.code === 100000) {
+                let path = res.data
                 let info = this.userInfo
                 info.file = path
                 this.RECORD_USERINFO({info: info})

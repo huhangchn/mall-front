@@ -26,7 +26,12 @@
                 <div class="cart-l" :class="{bt:j>0}">
                   <div class="car-l-l">
                     <div class="img-box"><a @click="goodsDetails(good.productId)"><img :src="good.productImg" alt=""></a></div>
-                    <div class="ellipsis"><a style="color: #626262;" @click="goodsDetails(good.productId)">{{good.productName}}</a></div>
+                    <div class="ellipsis">
+                      <a style="color: #626262;" @click="goodsDetails(good.productId)">{{good.productName}}</a>
+                      <ul class="attribute">
+                        <li style="color: #6b95ea">{{good.skuAttr}}</li>
+                      </ul>
+                    </div>
                   </div>
                   <div class="cart-l-r">
                     <div>¥ {{Number(good.salePrice).toFixed(2)}}</div>
@@ -73,8 +78,7 @@
   </div>
 </template>
 <script>
-  import { delOrder } from '/api/goods'
-  import { orderList } from '/api/orders'
+  import { orderList, delOrder } from '/api/orders'
   import YShelf from '/components/shelf'
   import { getStore } from '/utils/storage'
   export default {

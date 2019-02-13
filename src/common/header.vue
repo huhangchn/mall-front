@@ -47,12 +47,12 @@
                       <li>
                         <router-link to="/user/addressList">收货地址</router-link>
                       </li>
-                      <li>
-                        <router-link to="/user/support">售后服务</router-link>
-                      </li>
-                      <li>
-                        <router-link to="/user/coupon">我的优惠</router-link>
-                      </li>
+                      <!--<li>-->
+                        <!--<router-link to="/user/support">售后服务</router-link>-->
+                      <!--</li>-->
+                      <!--<li>-->
+                        <!--<router-link to="/user/coupon">我的优惠</router-link>-->
+                      <!--</li>-->
                       <li>
                         <a href="javascript:;" @click="_loginOut">退出</a>
                       </li>
@@ -344,6 +344,7 @@
         }
         loginOut(params).then(res => {
           removeStore('buyCart')
+          removeStore('token')
           window.location.href = '/'
         })
       },

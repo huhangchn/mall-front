@@ -65,11 +65,11 @@
     </div>
   </div>
 </template>
-<script src="../../../static/geetest/gt.js"></script>
 <script>
 import YFooter from '/common/footer'
 import YButton from '/components/YButton'
-import { register, geetest } from '/api/index.js'
+import { register } from '/api/user.js'
+import { geetest } from '/api/index.js'
 require('../../../static/geetest/gt.js')
 var captcha
 export default {
@@ -154,13 +154,13 @@ export default {
         validate: result.geetest_validate,
         seccode: result.geetest_seccode,
         statusKey: this.statusKey }).then(res => {
-          if (res.success === true) {
+          if (res.code === 100000) {
             this.messageSuccess()
             this.toLogin()
           } else {
-            this.message(res.message)
+            this.message(res.msg)
             captcha.reset()
-            this.regist = '注册'
+            this.registxt = '注册'
             return false
           }
         })

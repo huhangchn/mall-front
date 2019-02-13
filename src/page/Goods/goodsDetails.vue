@@ -64,8 +64,8 @@
     <div class="item-info">
       <y-shelf title="产品信息">
         <div slot="content">
-          <div class="img-item" v-if="productMsg">
-            <img :src="productMsg">
+          <div class="img-item" v-if="datailList.length">
+            <img :src="detailItem" v-for="(detailItem, index) in datailList" :key="index">
             <!--<div v-html="productMsg">{{ productMsg }}</div>-->
           </div>
           <div class="no-info" v-else>
@@ -106,7 +106,10 @@
       }
     },
     computed: {
-      ...mapState(['login', 'showMoveImg', 'showCart'])
+      ...mapState(['login', 'showMoveImg', 'showCart']),
+      datailList(){
+        return this.productMsg.split(",")
+      }
     },
     methods: {
       _productSaleInfo (productId){

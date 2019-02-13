@@ -5,7 +5,7 @@ import store from './store/'
 import VueLazyload from 'vue-lazyload'
 import infiniteScroll from 'vue-infinite-scroll'
 import VueCookie from 'vue-cookie'
-import { userInfo } from './api'
+import { userInfo } from './api/user'
 import { Form, Tag, Button, Pagination, Checkbox, Icon, Autocomplete, Loading, Message, Notification, Steps, Step, Table, TableColumn, Input, Dialog, Select, Option, RadioButton, RadioGroup } from 'element-ui'
 import { getStore } from '/utils/storage'
 import VueContentPlaceholders from 'vue-content-placeholders'
@@ -48,14 +48,14 @@ router.beforeEach(function (to, from, next) {
     }
   }
   userInfo(params).then(res => {
-    if (res.result.state !== 1) { // 没登录
+    if (res.data.state !== 1) { // 没登录
       if (whiteList.indexOf(to.path) !== -1) { // 白名单
         next()
       } else {
         next('/login')
       }
     } else {
-      store.commit('RECORD_USERINFO', {info: res.result})
+      store.commit('RECORD_USERINFO', {info: res.data})
       if (to.path === '/login') { //  跳转到
         next({path: '/'})
       }

@@ -81,6 +81,9 @@
               <a @click="goodsDetails(item.productId)" class="img-box"><img :src="item.productImg" alt=""></a>
               <div class="name-cell ellipsis">
                 <a @click="goodsDetails(item.productId)" title="" target="_blank">{{item.productName}}</a>
+                <ul class="attribute">
+                  <li style="color: #6b95ea">{{item.skuAttr}}</li>
+                </ul>
               </div>
               <div class="n-b">
                 <div class="price">¥ {{Number(item.salePrice).toFixed(2)}}</div>

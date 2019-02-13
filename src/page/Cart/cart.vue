@@ -37,7 +37,8 @@
                           <a @click="goodsDetails(item.productId)" :title="item.productName" target="_blank"
                              v-text="item.productName"></a>
                             <ul class="attribute">
-                              <li>白色</li>
+                              <li>颜色：{{item.skuStyle}}</li>
+                              <li>尺码：{{item.shoeSize}}</li>
                             </ul>
                         </div>
                       </div>

@@ -20,3 +20,7 @@ export const getOrderDet = (params) => {
 export const cancelOrder = (params) => {
   return http.fetchPost('/orders/cancelOrder', params)
 }
+// 删除订单
+export const delOrder = (params) => {
+  return http.fetchGet('/orders/delOrder', params)
+}
