@@ -207,10 +207,15 @@
           let data = res.data
           if (data.length) {
             this.addList = data
-            this.addressId = data[0].addressId || '1'
-            this.userName = data[0].userName
-            this.tel = data[0].tel
-            this.streetName = data[0].streetName
+
+			for (var i = 0; i < this.addList.length; i++) {
+			  if (this.addList[i].isDefault) {
+				this.chooseAddress(data[i].addressId || '1', data[i].userName, data[i].tel, data[i].streetName)
+				return;
+			  }
+			}
+
+
           } else {
             this.addList = []
           }
@@ -269,7 +274,7 @@
           if (res.code === 100000) {
             this.payment(res.data)
           } else {
-            this.message(res.message)
+            this.message(res.msg)
             this.submitOrder = '提交订单'
             this.submit = false
           }

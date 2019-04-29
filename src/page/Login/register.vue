@@ -29,11 +29,11 @@
                          placeholder="重复密码">
                 </div>
               </li>
-              <li>
+              <!--<li>
                 <div id="captcha">
                   <p id="wait">正在加载验证码...</p>
                 </div>
-              </li>
+              </li>-->
             </ul>
             <el-checkbox class="agree" v-model="agreement">
               我已阅读并同意遵守
@@ -141,25 +141,25 @@ export default {
         this.registxt = '注册'
         return false
       }
-      var result = captcha.getValidate()
-      if (!result) {
-        this.message('请完成验证')
-        this.registxt = '注册'
-        return false
-      }
+      // var result = captcha.getValidate()
+      // if (!result) {
+      //   this.message('请完成验证')
+      //   this.registxt = '注册'
+      //   return false
+      // }
       register({
         userName,
         userPwd,
-        challenge: result.geetest_challenge,
-        validate: result.geetest_validate,
-        seccode: result.geetest_seccode,
+        // challenge: result.geetest_challenge,
+        // validate: result.geetest_validate,
+        // seccode: result.geetest_seccode,
         statusKey: this.statusKey }).then(res => {
           if (res.code === 100000) {
             this.messageSuccess()
             this.toLogin()
           } else {
             this.message(res.msg)
-            captcha.reset()
+            // captcha.reset()
             this.registxt = '注册'
             return false
           }
@@ -186,7 +186,7 @@ export default {
     }
   },
   mounted () {
-    this.init_geetest()
+    // this.init_geetest()
   },
   components: {
     YFooter,

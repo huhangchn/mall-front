@@ -22,7 +22,7 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   .gray-box {
     position: relative;
-    margin-bottom: 30px;
+    margin-bottom: 0px;
     overflow: hidden;
     background: #fff;
     border-radius: 8px;

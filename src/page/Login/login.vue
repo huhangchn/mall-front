@@ -17,11 +17,11 @@
                 <input type="password" v-model="ruleForm.userPwd" @keyup.enter="login" placeholder="密码">
               </div>
             </li>
-            <li>
+            <!--<li>
               <div id="captcha">
                 <p id="wait">正在加载验证码...</p>
               </div>
-            </li>
+            </li>-->
             <li style="text-align: right" class="pr">
               <!--<el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>-->
               <!-- <span class="pa" style="top: 0;left: 0;color: #d44d44">{{ruleForm.errMsg}}</span> -->
@@ -156,24 +156,24 @@ export default {
         this.message('账号或者密码不能为空!')
         return false
       }
-      var result = captcha.getValidate()
-      if (!result) {
-        this.message('请完成验证')
-        this.logintxt = '登录'
-        return false
-      }
+      // var result = captcha.getValidate()
+      // if (!result) {
+      //   this.message('请完成验证')
+      //   this.logintxt = '登录'
+      //   return false
+      // }
       var params = {
         userName: this.ruleForm.userName,
         userPwd: this.ruleForm.userPwd,
-        challenge: result.geetest_challenge,
-        validate: result.geetest_validate,
-        seccode: result.geetest_seccode,
+        // challenge: result.geetest_challenge,
+        // validate: result.geetest_validate,
+        // seccode: result.geetest_seccode,
         statusKey: this.statusKey
       }
       userLogin(params).then(res => {
-        if (res.result.state === 1) {
-          setStore('token', res.result.token)
-          setStore('userId', res.result.id)
+        if (res.code === 100000){
+          setStore('token', res.data.token)
+          setStore('userId', res.data.id)
           // 登录后添加当前缓存中的购物车
           if (this.cart.length) {
             for (var i = 0; i < this.cart.length; i++) {
@@ -193,8 +193,8 @@ export default {
           }
         } else {
           this.logintxt = '登录'
-          this.message(res.result.message)
-          captcha.reset()
+          this.message(res.msg)
+          // captcha.reset()
           return false
         }
       })
@@ -222,7 +222,7 @@ export default {
   mounted () {
     this.getRemembered()
     this.login_addCart()
-    this.init_geetest()
+    // this.init_geetest()
     this.open('登录提示', '测试体验账号密码：test | test')
   },
   components: {

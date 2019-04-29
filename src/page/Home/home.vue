@@ -6,7 +6,8 @@
       <div class="banner">
         <div class="bg" ref="bg">
           <transition name="fade">
-            <div v-for="(item, i) in carouselList" v-if="i===mark" :key="i" style="position:absolute" @click="linkTo(item)"
+            <div v-for="(item, i) in carouselList" v-if="i===mark" :key="i" style="position:absolute"
+                 @click="linkTo(item)"
                  @mouseover="stopTimer" @mouseout="startTimer">
               <img v-if="item.picUrl" class="img1" :src="item.picUrl"/>
             </div>
@@ -19,45 +20,55 @@
           </ul>
         </div>
       </div>
-      <!-- 轮播图 END -->
+      <section class="w mt30 clearfix">
+        <y-shelf title="精选商品">
 
-      <!--<div v-for="(item,i) in home" :key="i">-->
-        <!--&lt;!&ndash; 一排四张图片的格式 &ndash;&gt;-->
-        <!--<div class="activity-panel" v-if="item.type === 1">-->
-          <!--<ul class="box">-->
-            <!--<li class="content" v-for="(iitem,j) in item.panelContents" :key="j" @click="linkTo(iitem)">-->
-              <!--<img class="i" :src="iitem.picUrl">-->
-              <!--<a class="cover-link"></a>-->
-            <!--</li>-->
-          <!--</ul>-->
+        </y-shelf>
+      </section>
+      <!-- 一排2张图片的格式 -->
+      <div class="activity-panel">
+        <ul class="box">
+          <li class="content" v-for="(item,j) in panelList1" :key="j" @click="linkTo(item)" v-if="j <= 3">
+            <img class="i" :src="item.picUrl">
+            <a class="cover-link"></a>
+          </li>
+        </ul>
+      </div>
+      <!-- END -->
+
+      <!-- 一排4张图片的格式 -->
+      <section class="w mt30 clearfix">
+        <y-shelf title="热销商品">
+        </y-shelf>
+      </section>
+      <div class="activity-panel">
+        <ul class="box">
+          <li class="content" v-for="(item,j) in panelList1" :key="j" @click="linkTo(item)" v-if="j >= 4 && j<= 7">
+            <img class="i" :src="item.picUrl">
+            <a class="cover-link"></a>
+          </li>
+        </ul>
+      </div>
+      <!-- END -->
+
+      <div v-for="(item,i) in home" :key="i">
+
+
+        <!--<section class="w mt30 clearfix" v-if="item.type === 3">-->
+        <!--<y-shelf :title="item.name">-->
+        <!--<div slot="content" class="floors">-->
+        <!--<div class="imgbanner" v-for="(iitem,j) in item.panelContents" :key="j"-->
+        <!--v-if="iitem.type === 2 || iitem.type === 3" @click="linkTo(iitem)">-->
+        <!--<img v-lazy="iitem.picUrl">-->
+        <!--<a class="cover-link"></a>-->
         <!--</div>-->
-        <!--&lt;!&ndash; END &ndash;&gt;-->
-
-        <!--&lt;!&ndash; 一排两张图片的格式 &ndash;&gt;-->
-        <!--<section class="w mt30 clearfix" v-if="item.type === 2">-->
-          <!--<y-shelf :title="item.name">-->
-            <!--<div slot="content" class="hot">-->
-              <!--<mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContents" :key="j"></mall-goods>-->
-            <!--</div>-->
-          <!--</y-shelf>-->
+        <!--<mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContents" :key="j+'key'"-->
+        <!--v-if="iitem.type != 2 && iitem.type != 3"></mall-goods>-->
+        <!--</div>-->
+        <!--</y-shelf>-->
         <!--</section>-->
-        <!--&lt;!&ndash; END &ndash;&gt;-->
 
-        <!--&lt;!&ndash;<section class="w mt30 clearfix" v-if="item.type === 3">&ndash;&gt;-->
-          <!--&lt;!&ndash;<y-shelf :title="item.name">&ndash;&gt;-->
-            <!--&lt;!&ndash;<div slot="content" class="floors">&ndash;&gt;-->
-              <!--&lt;!&ndash;<div class="imgbanner" v-for="(iitem,j) in item.panelContents" :key="j"&ndash;&gt;-->
-                   <!--&lt;!&ndash;v-if="iitem.type === 2 || iitem.type === 3" @click="linkTo(iitem)">&ndash;&gt;-->
-                <!--&lt;!&ndash;<img v-lazy="iitem.picUrl">&ndash;&gt;-->
-                <!--&lt;!&ndash;<a class="cover-link"></a>&ndash;&gt;-->
-              <!--&lt;!&ndash;</div>&ndash;&gt;-->
-              <!--&lt;!&ndash;<mall-goods :msg="iitem" v-for="(iitem,j) in item.panelContents" :key="j+'key'"&ndash;&gt;-->
-                          <!--&lt;!&ndash;v-if="iitem.type != 2 && iitem.type != 3"></mall-goods>&ndash;&gt;-->
-            <!--&lt;!&ndash;</div>&ndash;&gt;-->
-          <!--&lt;!&ndash;</y-shelf>&ndash;&gt;-->
-        <!--&lt;!&ndash;</section>&ndash;&gt;-->
-
-      <!--</div>-->
+      </div>
     </div>
 
     <div class="no-info" v-if="error">
@@ -68,12 +79,12 @@
     </div>
 
     <el-dialog
-    title="通知"
-    :visible.sync="dialogVisible"
-    width="30%"
-    style="width:70%;margin:0 auto">
-    <span>降价大甩卖！！！</span>
-    <span slot="footer" class="dialog-footer">
+      title="通知"
+      :visible.sync="dialogVisible"
+      width="30%"
+      style="width:70%;margin:0 auto">
+      <span>降价大甩卖！！！</span>
+      <span slot="footer" class="dialog-footer">
     <el-button type="primary" @click="dialogVisible = false">知道了</el-button>
     </span>
     </el-dialog>
@@ -87,7 +98,7 @@
   import {setStore, getStore} from '/utils/storage.js'
 
   export default {
-    data() {
+    data () {
       return {
         error: false,
         banner: [],
@@ -104,31 +115,32 @@
         dialogVisible: false,
         timer: '',
         homeContentList: [],
-        carouselList: []
+        carouselList: [],
+        panelList1: []
       }
     },
     methods: {
-      autoPlay() {
+      autoPlay () {
         this.mark++
         if (this.mark > this.carouselList.length - 1) {
           // 当遍历到最后一张图片置零
           this.mark = 0
         }
       },
-      play() {
+      play () {
         // 每2.5s自动切换
         this.timer = setInterval(this.autoPlay, 2500)
       },
-      change(i) {
+      change (i) {
         this.mark = i
       },
-      startTimer() {
+      startTimer () {
         this.timer = setInterval(this.autoPlay, 2500)
       },
-      stopTimer() {
+      stopTimer () {
         clearInterval(this.timer)
       },
-      linkTo(item) {
+      linkTo (item) {
         // 关联商品
         this.$router.push({
           path: '/goodsDetails',
@@ -139,13 +151,13 @@
         // 完整链接
         // window.location.href = item.url
       },
-      bgOver(e) {
+      bgOver (e) {
         this.bgOpt.px = e.offsetLeft
         this.bgOpt.py = e.offsetTop
         this.bgOpt.w = e.offsetWidth
         this.bgOpt.h = e.offsetHeight
       },
-      bgMove(dom, eve) {
+      bgMove (dom, eve) {
         let bgOpt = this.bgOpt
         let X, Y
         let mouseX = eve.pageX - bgOpt.px
@@ -163,11 +175,11 @@
         dom.style['transform'] = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
         dom.style.transform = `rotateY(${X / 50}deg) rotateX(${Y / 50}deg)`
       },
-      bgOut(dom) {
+      bgOut (dom) {
         dom.style['transform'] = 'rotateY(0deg) rotateX(0deg)'
         dom.style.transform = 'rotateY(0deg) rotateX(0deg)'
       },
-      showNotify() {
+      showNotify () {
         var value = getStore('notify')
         if (this.notify !== value) {
           this.dialogVisible = true
@@ -175,7 +187,7 @@
         }
       }
     },
-    mounted() {
+    mounted () {
       getHomeContent().then(res => {
         if (res.code !== 100000) {
           this.error = true
@@ -183,15 +195,19 @@
         }
         this.homeContentList = res.data
         for (let homeContent of this.homeContentList) {
-          if(homeContent.id === 89){
+          if (homeContent.id === 1) {
             this.carouselList = homeContent.contentList
+          }
+          if (homeContent.id === 2) {
+            this.panelList1 = homeContent.contentList
           }
         }
         this.loading = false
       })
+
       this.showNotify()
     },
-    created() {
+    created () {
       this.play()
     },
     components: {
@@ -263,7 +279,7 @@
       overflow: hidden;
       position: relative;
       z-index: 0;
-      margin-top: 25px;
+      margin-top: 0px;
       box-sizing: border-box;
       border: 1px solid rgba(0, 0, 0, .14);
       border-radius: 8px;

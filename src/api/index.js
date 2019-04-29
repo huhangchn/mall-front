@@ -9,11 +9,11 @@ export const loginOut = (params) => {
 }
 
 // 修改头像
-export const updateheadimage = (params) => {
-  return http.fetchPost('/member/updateheadimage', params)
-}
+// export const updateheadimage = (params) => {
+//   return http.fetchPost('/member/updateheadimage', params)
+// }
 // 极验验证码
-export const geetest = (params) => {
-  return http.fetchGet('/member/geetestInit?t=' + (new Date()).getTime(), params)
-}
+// export const geetest = (params) => {
+//   return http.fetchGet('/member/geetestInit?t=' + (new Date()).getTime(), params)
+// }
 
