@@ -37,22 +37,25 @@
                     <div>¥ {{Number(good.salePrice).toFixed(2)}}</div>
                     <div class="num">{{good.productNum}}</div>
                     <div class="type">
-                      <el-button style="margin-left:20px" @click="_delOrder(item.orderId,i)" type="danger" size="small" v-if="j<1" class="del-order">删除此订单</el-button>
-                      <!-- <a @click="_delOrder(item.orderId,i)" href="javascript:;" v-if="j<1" class="del-order">删除此订单</a> -->
+                      <div v-if="j<1&&(item.orderStatus === '4' || item.orderStatus === '5' || item.orderStatus === '6')">
+                        <el-button @click="_delOrder(item.orderId,i)" type="danger" size="small">删除订单</el-button>
+                      </div>
+                      <div v-if="j<1&&(item.orderStatus === '0')">
+                        <el-button @click="orderPayment(item.orderId)" type="primary" size="small">现在付款</el-button>
+                      </div>
+                      <div v-if="j<1&&(item.orderStatus === '2')">
+                        <el-button @click="handleConfirmOrder(item.orderId)" type="primary" size="small">确认收货</el-button>
+                      </div>
                     </div>
                   </div>
                 </div>
                 <div class="cart-r">
-                  <span></span>
-                  <span></span>
+                  <div class="prod-operation pa" style="right: 0;top: 0;">
+                    <div class="total">¥ {{item.orderTotal}}</div>
+
+                    <div class="status"> {{getOrderStatus(item.orderStatus)}}  </div>
+                  </div>
                 </div>
-              </div>
-              <div class="prod-operation pa" style="right: 0;top: 0;">
-                <div class="total">¥ {{item.orderTotal}}</div>
-                <div v-if="item.orderStatus === '0'">
-                  <el-button @click="orderPayment(item.orderId)" type="primary" size="small">现在付款</el-button>
-                </div>
-                <div class="status" v-if="item.orderStatus !== '0'"> {{getOrderStatus(item.orderStatus)}}  </div>
               </div>
             </div>
           </div>
@@ -78,7 +81,7 @@
   </div>
 </template>
 <script>
-  import { orderList, delOrder } from '/api/orders'
+  import { orderList, delOrder, confirmOrder } from '/api/orders'
   import YShelf from '/components/shelf'
   import { getStore } from '/utils/storage'
   export default {
@@ -110,6 +113,21 @@
       orderPayment (orderId) {
         window.open(window.location.origin + '#/order/payment?orderId=' + orderId)
       },
+      handleConfirmOrder (orderId) {
+        let params = {
+          params: {
+            orderId: orderId
+          }
+        }
+        confirmOrder(params).then(res => {
+          if (res.code === 100000) {
+            // this._orderList()
+            this.orderDetail(orderId)
+          } else {
+            this.message('确认失败')
+          }
+        })
+      },
       goodsDetails (skuId) {
         window.open(window.location.origin + '#/goodsDetails?skuId=' + skuId)
       },
@@ -122,19 +140,19 @@
         })
       },
       getOrderStatus (status) {
-        if (status === '1') {
-          return '支付审核中'
-        } else if (status === '2') {
+        if (status === '0') {
+          return '待付款'
+        } else if (status === '1') {
           return '待发货'
-        } else if (status === '3') {
+        } else if (status === '2') {
           return '待收货'
-        } else if (status === '4') {
+        } else if (status === '3') {
           return '交易成功'
-        } else if (status === '5') {
+        } else if (status === '4') {
           return '交易关闭'
-        } else if (status === '6') {
+        } else if (status === '5') {
           return '支付失败'
-        }else if (status === '7') {
+        }else if (status === '6') {
           return '交易取消'
         }
 

@@ -3,28 +3,21 @@
     <y-shelf v-bind:title="orderTitle">
       <div slot="content">
         <div v-loading="loading" element-loading-text="加载中..." style="min-height: 10vw;" v-if="orderList.length">
-          <div class="orderStatus" v-if="orderStatus !== -1 && orderStatus !== 6">
-            <el-steps :space="200" :active="orderStatus">
+          <div class="orderStatus" v-if="active !== -1">
+            <el-steps :space="300" :active="active">
               <el-step title="下单" v-bind:description="createTime"></el-step>
               <el-step title="付款" v-bind:description="payTime"></el-step>
-              <el-step title="配货" description=""></el-step>
-              <el-step title="出库" description=""></el-step>
+              <el-step title="发货" description=""></el-step>
               <el-step title="交易成功" v-bind:description="finishTime"></el-step>
             </el-steps>
           </div>
-          <div class="orderStatus-close" v-if="orderStatus === -1">
+          <div class="orderStatus-close" v-if="active === -1">
             <el-steps :space="780" :active="2">
               <el-step title="下单" v-bind:description="createTime"></el-step>
               <el-step title="交易关闭" v-bind:description="closeTime"></el-step>
             </el-steps>
           </div>
-          <div class="orderStatus-close" v-if="orderStatus === 6">
-            <el-steps :space="780" :active="2">
-              <el-step title="下单" v-bind:description="createTime"></el-step>
-              <el-step title="交易关闭" v-bind:description="closeTime"></el-step>
-            </el-steps>
-          </div>
-          <div class="status-now" v-if="orderStatus === 1">
+          <div class="status-now" v-if="orderStatus == 0">
             <ul>
               <li class="status-title"><h3>订单状态：待付款</h3></li>
               <li class="button">
@@ -32,31 +25,23 @@
                 <el-button @click="_cancelOrder()" size="small">取消订单</el-button>
               </li>
             </ul>
-            <p class="realtime">
-              <span>您的付款时间还有 </span>
-              <span class="red"><countDown v-bind:endTime="countTime" endText="已结束"></countDown></span>
-              <span>，超时后订单将自动取消。</span>
-            </p>
           </div>
-          <div class="status-now" v-if="orderStatus === 2">
+          <div class="status-now" v-if="orderStatus === 1">
             <ul>
-              <li class="status-title"><h3>订单状态：已支付，待系统审核确认</h3></li>
+              <li class="status-title"><h3>订单状态：已支付</h3></li>
             </ul>
-            <!--<p class="realtime">-->
-              <!--<span>请耐心等待审核，审核结果将发送到您的邮箱，并且您所填写的捐赠数据将显示在捐赠表中。</span>-->
-            <!--</p>-->
           </div>
           <div class="status-now" v-if="orderStatus === -1 || orderStatus === 6">
             <ul>
-              <li class="status-title"><h3>订单状态：已关闭</h3></li>
+              <li class="status-title"><h3>订单状态：已取消</h3></li>
             </ul>
             <p class="realtime">
-              <span>您的订单已关闭。</span>
+              <span>您的订单已取消。</span>
             </p>
           </div>
-          <div class="status-now" v-if="orderStatus === 5">
+          <div class="status-now" v-if="orderStatus === 3">
             <ul>
-              <li class="status-title"><h3>订单状态：已完成</h3></li>
+              <li class="status-title"><h3>订单状态：交易成功</h3></li>
             </ul>
             <p class="realtime">
               <span>您的订单已交易成功，感谢您的惠顾！</span>
@@ -148,6 +133,20 @@
         loading: true,
         countTime: 0
       }
+    },computed: {
+      active(){
+        if(this.orderStatus == 0){
+          return 1
+        }else if(this.orderStatus == 1){
+          return 2
+        }else if(this.orderStatus == 2){
+          return 3
+        }else if(this.orderStatus == 3){
+          return 4
+        }else {
+          return -1
+        }
+      }
     },
     methods: {
       message (m) {
@@ -169,17 +168,8 @@
         }
         getOrderDet(params).then(res => {
           let data = res.data
-          if (data.orderStatus === '0') {
-            this.orderStatus = 1
-          } else if (data.orderStatus === '1') {
-            this.orderStatus = 2
-          } else if (data.orderStatus === '4') {
-            this.orderStatus = 5
-          } else if (data.orderStatus === '5') {
-            this.orderStatus = -1
-          } else if (data.orderStatus === '7') {
-            this.orderStatus = 6
-          }
+          this.orderStatus = data.orderStatus
+
           this.orderList = data.goodsList
           this.orderTotal = data.orderTotal
           this.userName = data.addressInfo.userName

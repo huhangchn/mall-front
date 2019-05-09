@@ -38,7 +38,7 @@
       <div class="search">
         <div class="w" v-if="!tagsBrand.length">
           <span>品牌</span>
-          <a v-for="(brand, index) in brandList" :key="index" @click.prevent="brandClick(brand)" v-if="index<8">{{brand.name}}</a>
+          <a v-for="(brand, index) in brandList" :key="index" @click.prevent="brandClick(brand)">{{brand.name}}</a>
         </div>
         <div class="w" v-if="!tagsCategory.length">
           <span>分类</span>

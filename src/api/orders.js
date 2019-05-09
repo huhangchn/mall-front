@@ -24,3 +24,12 @@ export const cancelOrder = (params) => {
 export const delOrder = (params) => {
   return http.fetchGet('/orders/delOrder', params)
 }
+// 支付订单
+export const payOrder = (params) => {
+  return http.fetchGet('/orders/payOrder', params)
+}
+
+// 支付订单
+export const confirmOrder = (params) => {
+  return http.fetchGet('/orders/confirmOrder', params)
+}

@@ -98,7 +98,7 @@
 <script>
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
-  import { getOrderDet, payMent } from '/api/orders'
+  import { getOrderDet, payOrder } from '/api/orders'
   import { getStore, setStore } from '/utils/storage'
   export default {
     data () {
@@ -190,15 +190,12 @@
         } else {
           this.type = '其它'
         }
-        payMent({
-          nickName: this.nickName,
-          money: this.money,
-          info: this.info,
-          email: this.email,
-          orderId: this.orderId,
-          userId: this.userId,
-          payType: this.type
-        }).then(res => {
+        let params = {
+          params: {
+            orderId: this.orderId
+          }
+        }
+        payOrder(params).then(res => {
           if (res.code === 100000) {
             setStore('setTime', 90)
             setStore('price', this.orderTotal)

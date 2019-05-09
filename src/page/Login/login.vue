@@ -26,7 +26,7 @@
               <!--<el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>-->
               <!-- <span class="pa" style="top: 0;left: 0;color: #d44d44">{{ruleForm.errMsg}}</span> -->
               <a href="javascript:;" class="register" @click="toRegister">注册 淘鞋网 账号</a>
-              <a style="padding: 1px 0 0 10px" @click="open('找回密码','测试账号：test | test')">忘记密码 ?</a>
+              <a style="padding: 1px 0 0 10px" @click="open('找回密码','测试账号：huhang | 111111')">忘记密码 ?</a>
             </li>
           </ul>
           <!--登陆-->
@@ -223,7 +223,7 @@ export default {
     this.getRemembered()
     this.login_addCart()
     // this.init_geetest()
-    this.open('登录提示', '测试体验账号密码：test | test')
+    this.open('登录提示', '测试体验账号密码：huhang | 111111')
   },
   components: {
     YFooter,

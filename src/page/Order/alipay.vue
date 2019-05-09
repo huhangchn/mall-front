@@ -60,11 +60,12 @@
   import YShelf from '/components/shelf'
   import YButton from '/components/YButton'
   import { getStore, setStore } from '/utils/storage'
+  import { payOrder } from '/api/orders'
   export default {
     data () {
       return {
         show: true,
-        count: 25,
+        count: 3,
         userId: '',
         orderTotal: '',
         userName: '',
@@ -112,6 +113,7 @@
         if (this.count === 0) {
           this.payNow = '确认已支付'
           this.submit = true
+
           return
         } else {
           this.count--
